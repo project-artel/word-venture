@@ -4,13 +4,14 @@
 
 [대회 설명](https://www.gigdc.or.kr/sub01/sub02.php)
 
+## Artel SDK Sample
 
-## 이렇게 사용하세요.
+이 프로젝트는 `artel-sdk`의 sample game으로 사용됩니다. Unity Package
+Manager는 상위 저장소의 로컬 패키지를 참조합니다.
 
-1. 기능을 추가하려면 기능별 브랜치를 만들어서 작업해주세요.
-2. 작업이 끝났다면 본인 브랜치에 develop 브랜치를 먼저 병합하고, 오류가 있다면 오류를 해결해주세요.
-3. 문제가 다 해결되었다면, develop 브랜치에 병합해주세요.
-4. 하나의 버전이 병합 후 안정적으로 완성이 되었다면, 메인 브랜치에 병합해주세요.
+```json
+"kr.artel.sdk": "file:../../../Packages/kr.artel.sdk"
+```
 
 ## 이렇게 정리합시다.
 1. 본인의 폴더를 만들어서 스크립트나 리소스를 정리합시다.

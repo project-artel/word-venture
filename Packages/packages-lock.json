@@ -228,6 +228,12 @@
       },
       "url": "https://packages.unity.com"
     },
+    "kr.artel.sdk": {
+      "version": "file:../../../Packages/kr.artel.sdk",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
