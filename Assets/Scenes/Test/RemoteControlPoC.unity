@@ -169,8 +169,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -269,6 +269,7 @@ GameObject:
   - component: {fileID: 519873420}
   - component: {fileID: 519873424}
   - component: {fileID: 519873423}
+  - component: {fileID: 519873425}
   m_Layer: 0
   m_Name: Artel
   m_TagString: Untagged
@@ -288,7 +289,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0ad8e1699ba44baaa1db445298978b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startServerOnEnable: 1
+  artelManager: {fileID: 0}
+  startOnEnable: 1
   bindAddress: 127.0.0.1
   httpPort: 17310
   websocketPort: 17311
@@ -304,9 +306,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fca2a5fbd7954a0fafd2eab55e11ea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startServerOnEnable: 1
-  bindAddress: 127.0.0.1
-  port: 17311
+  connectOnEnable: 0
+  server:
+    secure: 1
+    host:
+    port: 443
 --- !u!4 &519873422
 Transform:
   m_ObjectHideFlags: 0
@@ -344,12 +348,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2dc2a7fb58194bbd9cfbca719b2956cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   canvas: {fileID: 1319009678}
   inputField: {fileID: 1118568261}
   submitButton: {fileID: 1115274877}
   outputText: {fileID: 1775242272}
+--- !u!114 &519873425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519873419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4900c19c0d3f4652afb9ff11003b00b, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &524611058
 GameObject:
   m_ObjectHideFlags: 0
