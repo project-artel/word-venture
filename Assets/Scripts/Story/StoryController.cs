@@ -75,6 +75,11 @@ namespace WordVenture.Story
 
                 yield return new WaitUntil(IsAdvanceKeyDown);
                 chatWindowController.SetAnyKeyPromptVisible(false);
+
+                // 입력이 발생한 프레임을 소비한다. WaitUntil은 yield된 프레임에 바로 평가되므로,
+                // 이게 없으면 다음 대사를 시작한 직후의 대기가 같은 프레임의 anyKeyDown으로
+                // 곧바로 성립해서 한 번의 입력이 "다음 대사 진행 + 타이핑 즉시 완료"까지 해버린다.
+                yield return null;
             }
 
             LoadMapScene();
