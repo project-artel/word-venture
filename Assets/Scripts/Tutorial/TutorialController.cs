@@ -13,6 +13,10 @@ namespace WordVenture.Tutorial
         [SerializeField] TutorialFlag currentFlag = TutorialFlag.FLAG_001_START_TUTORIAL;
         [SerializeField] ITutorialCondition tutorialCondition;
 
+        // 대사를 다 읽었다는 확인 입력을 기다리는 중인지. 확인 입력을 받기 전에는
+        // 다음 대사로 넘어가지 않는다.
+        bool waitingForAcknowledge;
+
         private void Awake()
         {
             if (Instance == null)
@@ -54,7 +58,9 @@ namespace WordVenture.Tutorial
         {
             TutorialChatData tutorialChatData = tutorialScript.GetScriptData(currentFlag);
             tutorialChatWindow.SetSpeakerImage(tutorialScript.GetSprite(tutorialChatData.portraitID));
+            tutorialChatWindow.SetAnyKeyPromptVisible(false);
             tutorialChatWindow.UpdateChatStream(tutorialChatData.name, tutorialChatData.text);
+            waitingForAcknowledge = true;
         }
 
         public void ProceedTutorial()
@@ -72,14 +78,27 @@ namespace WordVenture.Tutorial
                 gameObject.SetActive(false);
             }
 
-            if (Time.time > tutorialChatWindow.chatRemainTime && tutorialChatWindow.ChatStatus.Equals(ChatStatus.DEFAULT))
+            if (waitingForAcknowledge)
             {
-                ProceedTutorial();
-            }
-            if (Time.time > tutorialChatWindow.chatCloseTime && tutorialChatWindow.ChatStatus.Equals(ChatStatus.DEFAULT))
-            {
+                if (!IsAdvanceKeyDown())
+                {
+                    return;
+                }
+
+                // 타이핑 중이면 첫 입력은 연출 스킵으로 쓴다. 연타로 대사가 통째로 날아가지 않게 한다.
+                if (tutorialChatWindow.IsStreaming)
+                {
+                    tutorialChatWindow.CompleteStream();
+                    return;
+                }
+
+                waitingForAcknowledge = false;
+                tutorialChatWindow.SetAnyKeyPromptVisible(false);
                 tutorialChatWindow.gameObject.SetActive(false);
+                return;
             }
+
+            ProceedTutorial();
         }
 
         public bool IsFlagEqual(TutorialFlag flag)
@@ -89,4 +108,3 @@ namespace WordVenture.Tutorial
     }
 
 }
-
