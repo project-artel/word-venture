@@ -9,6 +9,8 @@ namespace WordVenture.Story
     {
         private const float TEXT_STREAM_INTERVAL = 0.03f;
 
+        [SerializeField] GameObject anyKeyPrompt;
+
         private TMP_Text chatName;
         private TMP_Text chatText;
 
@@ -65,8 +67,23 @@ namespace WordVenture.Story
             OnStreamComplete();
         }
 
+        /// <summary>
+        /// "아무 키나 누르세요" 안내를 켜고 끈다. 안내 오브젝트가 연결되지 않은
+        /// 대화창도 있으므로 null이면 조용히 넘어간다.
+        /// </summary>
+        public void SetAnyKeyPromptVisible(bool visible)
+        {
+            if (anyKeyPrompt == null)
+            {
+                return;
+            }
+
+            anyKeyPrompt.SetActive(visible);
+        }
+
         protected virtual void OnStreamComplete()
         {
+            SetAnyKeyPromptVisible(true);
         }
 
         /// <summary>

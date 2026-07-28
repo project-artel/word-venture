@@ -41,30 +41,10 @@ namespace WordVenture.Tutorial
     public class TutorialChatWindow : ChatWindowController
     {
         [SerializeField] Image speakerImage;
-        [SerializeField] GameObject anyKeyPrompt;
 
         public void SetSpeakerImage(Sprite image)
         {
             speakerImage.sprite = image;
-        }
-
-        /// <summary>
-        /// "아무 키나 누르세요" 안내를 켜고 끈다. 프리팹에 안내 오브젝트가
-        /// 연결되지 않아도 튜토리얼 자체는 동작해야 한다.
-        /// </summary>
-        public void SetAnyKeyPromptVisible(bool visible)
-        {
-            if (anyKeyPrompt == null)
-            {
-                return;
-            }
-
-            anyKeyPrompt.SetActive(visible);
-        }
-
-        protected override void OnStreamComplete()
-        {
-            SetAnyKeyPromptVisible(true);
         }
     }
 

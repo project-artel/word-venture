@@ -17,7 +17,6 @@
 - 튜토리얼 스크립트 데이터(`TutorialScript.asset`) 문구는 바꾸지 않는다.
 - Back 버튼의 크기·스프라이트·동작(`BackButton.BackToMain`)은 바꾸지 않는다. 앵커/위치만 고친다.
 - 신규 Input System 도입 없음. 기존 레거시 `Input` API 유지.
-- 스토리 씬(StoryScene/EndingScene)의 진행 키는 Space를 유지한다. 이슈 본문이 튜토리얼만 명시한다.
 
 ## Context / Constraints
 
@@ -64,6 +63,15 @@ CanvasScaler는 `ScaleWithScreenSize`, 레퍼런스 1920x1080, `m_MatchWidthOrHe
 
 `Assets` 아래에 `.asmdef`도 테스트 어셈블리도 없다. 자동화 테스트를 새로 세우는 것은 이 이슈의 범위 밖이다.
 검증은 **배치모드 컴파일 + 에디터 수동 재생**으로 한다. Unity 2022.3.34f1이 설치되어 있다.
+
+## 추가 요청 (2026-07-28, 이슈 본문 외)
+
+- 스토리 씬에도 "아무 키나 누르세요" 안내를 노출한다. 안내를 띄우는 이상 진행 키도 Space에서
+  아무 키로 맞춘다. 안내와 실제 입력이 어긋나면 안 된다.
+- 스토리 대사가 화면 좌우 끝까지 출력된다. 여백을 준다.
+
+이에 따라 `anyKeyPrompt` / `SetAnyKeyPromptVisible` / `IsAdvanceKeyDown`을 기반 클래스
+(`ChatWindowController`, `StoryController`)로 올려 튜토리얼과 스토리가 공유한다.
 
 ## Approach (Checklist)
 
@@ -134,8 +142,9 @@ CanvasScaler는 `ScaleWithScreenSize`, 레퍼런스 1920x1080, `m_MatchWidthOrHe
   ```
   컴파일 에러가 없어야 한다. 이후 에디터에서 수동 재생.
 - **Expected output:**
-  1. StoryScene: 대사 진행 중 Space 연타 → 깜박임 없음. 첫 입력은 타이핑 즉시 완료,
-     두 번째 입력에서 다음 대사로 이동.
+  1. StoryScene / EndingScene: 대사 진행 중 연타 → 깜박임 없음. 첫 입력은 타이핑 즉시 완료,
+     두 번째 입력에서 다음 대사로 이동. 타이핑이 끝나면 안내가 뜬다.
+  1-b. 스토리 대사 좌우에 여백이 생겨 화면 끝까지 붙지 않는다.
   2. TurnBattleScene 튜토리얼: 대사가 3초 뒤 자동으로 넘어가지 않는다. 키를 눌러야 진행한다.
   3. 스트리밍이 끝나면 `아무 키나 누르세요` 안내가 뜨고, 키를 누르면 안내와 대화창이 사라진다.
   4. 카드 조합 등 게임플레이 조건 구간: 확인 입력 후 창이 닫히고, 조건 충족 시 창이 다시 열리며 다음 대사.
@@ -160,7 +169,6 @@ CanvasScaler는 `ScaleWithScreenSize`, 레퍼런스 1920x1080, `m_MatchWidthOrHe
 
 - **`ChatStatus` enum을 남겨두고 `IsStreaming`과 병행** — 참조처가 `TutorialController` 한 곳뿐이라
   상태 표현을 둘로 유지할 이유가 없다. 제거한다.
-- **스토리 씬도 "아무 키"로 통일** — 이슈 본문이 튜토리얼만 명시한다. 범위를 넓히지 않는다.
 - **`Constant` 클래스 전체 삭제** — `TUTORIAL_TEXT_TIME`이 base의 타이핑 간격과 같은 값이라 함께
   정리하지만, `Constant` 클래스 자체는 다른 용도로 남을 수 있으므로 빈 껍데기 정리만 한다.
 

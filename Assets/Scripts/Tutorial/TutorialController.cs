@@ -101,18 +101,6 @@ namespace WordVenture.Tutorial
             ProceedTutorial();
         }
 
-        /// <summary>
-        /// 진행 입력은 키보드만 받는다. Input.anyKeyDown은 마우스 버튼도 포함하는데,
-        /// 전투 중 카드 클릭이 대사를 넘겨버리면 안 된다.
-        /// </summary>
-        static bool IsAdvanceKeyDown()
-        {
-            return Input.anyKeyDown
-                && !Input.GetMouseButtonDown(0)
-                && !Input.GetMouseButtonDown(1)
-                && !Input.GetMouseButtonDown(2);
-        }
-
         public bool IsFlagEqual(TutorialFlag flag)
         {
             return currentFlag.Equals(flag);
