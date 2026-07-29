@@ -21,13 +21,13 @@ namespace WordVenture.Cards
     public class Card : MonoBehaviour
     {
         [SerializeField] TMP_Text nameTMP;
-        [SerializeField] Sprite magicCard;
-        [SerializeField] Sprite typeCard;
+        [FormerlySerializedAs("MagicCard")] [SerializeField] Sprite magicCard;
+        [FormerlySerializedAs("TypeCard")] [SerializeField] Sprite typeCard;
 
         public MagicType cardType;
 
         public Word word;
-        public Prs originPrs;
+        [FormerlySerializedAs("originPRS")] public Prs originPrs;
 
         public void Setup(Word word)
         {

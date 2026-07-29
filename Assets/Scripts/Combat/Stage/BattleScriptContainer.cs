@@ -17,8 +17,8 @@ namespace WordVenture.Combat.Stage
 
     [Serializable]
     public struct EnemySpawnData{
-        public float spawnPositionX;
-        public int enemyId;
+        [FormerlySerializedAs("SpawnPositionX")] public float spawnPositionX;
+        [FormerlySerializedAs("EnemyId")] public int enemyId;
     }
 
 
