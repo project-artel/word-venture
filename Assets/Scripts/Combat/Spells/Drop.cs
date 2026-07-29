@@ -1,9 +1,9 @@
+using Cards;
+using Combat.Enemies;
 using UnityEngine;
 using UnityEngine.Serialization;
-using WordVenture.Cards;
-using WordVenture.Combat.Enemies;
 
-namespace WordVenture.Combat.Spells
+namespace Combat.Spells
 {
 
     public class Drop : MonoBehaviour
@@ -14,7 +14,7 @@ namespace WordVenture.Combat.Spells
         [FormerlySerializedAs("DroplightningPrefab")] public GameObject droplightningPrefab;
         [FormerlySerializedAs("DropholyPrefab")] public GameObject dropholyPrefab;
 
-        public void Run(WordVenture.Cards.MagicType magicType1, SelectableObject target, WordVenture.Combat.MagicAffinityTable magicAffinityTable)
+        public void Run(MagicType magicType1, SelectableObject target, MagicAffinityTable magicAffinityTable)
         {
             //GameObject target = GameObject.FindGameObjectWithTag(magicType2.ToString());
 
@@ -22,19 +22,19 @@ namespace WordVenture.Combat.Spells
 
             switch (magicType1)
             {
-                case WordVenture.Cards.MagicType.Fire:
+                case MagicType.Fire:
                     prefabToInstantiate = dropfirePrefab;
                     break;
-                case WordVenture.Cards.MagicType.Ice:
+                case MagicType.Ice:
                     prefabToInstantiate = dropicePrefab;
                     break;
-                case WordVenture.Cards.MagicType.Rock:
+                case MagicType.Rock:
                     prefabToInstantiate = droprockPrefab;
                     break;
-                case WordVenture.Cards.MagicType.Lightning:
+                case MagicType.Lightning:
                     prefabToInstantiate = droplightningPrefab;
                     break;
-                case WordVenture.Cards.MagicType.Holy:
+                case MagicType.Holy:
                     prefabToInstantiate = dropholyPrefab;
                     break;
             }

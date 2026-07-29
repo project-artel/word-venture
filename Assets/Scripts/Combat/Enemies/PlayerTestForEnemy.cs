@@ -1,14 +1,8 @@
-using System.Collections.Generic;
-using System.Collections;
 using TMPro;
-using UnityEngine.SceneManagement;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Enemies;
-using WordVenture.Combat.Stage;
-using WordVenture.Combat.UI;
+using UnityEngine.SceneManagement;
 
-namespace WordVenture.Combat.Enemies
+namespace Combat.Enemies
 {
     public class Player : MonoBehaviour
     {

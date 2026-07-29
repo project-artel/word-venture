@@ -1,18 +1,15 @@
-using JetBrains.Annotations;
-using Quaternion = UnityEngine.Quaternion;
-using Random = UnityEngine.Random;
-using System.Collections.Generic;
-using System.Collections;
-using System.Numerics;
 using System;
-using Unity.VisualScripting;
+using System.Collections.Generic;
+using Combat.UI;
+using Core;
+using Map;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Quaternion = UnityEngine.Quaternion;
+using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
-using WordVenture.Combat.UI;
-using WordVenture.Core;
 
-namespace WordVenture.Cards
+namespace Cards
 {
     public class CardManager : MonoBehaviour
     {
@@ -179,7 +176,7 @@ namespace WordVenture.Cards
 
         void WordOS_state()
         {
-            switch(WordVenture.Map.MapMove.StagePosition)
+            switch(MapMove.StagePosition)
             {
                 case 0:
                     wordSo.words[0].percent = 1;

@@ -1,9 +1,10 @@
 using System.Collections;
+using Core;
+using Map;
+using Story;
 using UnityEngine;
-using WordVenture.Core;
-using WordVenture.Story;
 
-namespace WordVenture.Tutorial
+namespace Tutorial
 {
     public class TutorialController : StoryController
     {
@@ -41,7 +42,7 @@ namespace WordVenture.Tutorial
 
         void Start()
         {
-            if (WordVenture.Map.MapMove.StagePosition > 0)
+            if (MapMove.StagePosition > 0)
             {
                 gameObject.SetActive(false);
                 return;

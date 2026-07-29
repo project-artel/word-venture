@@ -1,11 +1,4 @@
-using System.Collections.Generic;
-using System.Collections;
-using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Stage;
-using WordVenture.Combat.UI;
-
-namespace WordVenture.Combat.Enemies
+namespace Combat.Enemies
 {
     public class SwordEnemy : Enemy
     {

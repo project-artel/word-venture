@@ -1,14 +1,13 @@
-using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.UI;
+using System.Collections.Generic;
+using Cards;
+using Combat.Enemies;
+using Combat.Spells;
 using UnityEngine;
 using UnityEngine.Serialization;
-using WordVenture.Cards;
-using WordVenture.Combat.Enemies;
-using WordVenture.Combat.Spells;
-using static WordVenture.Battle.Player;
+using UnityEngine.UI;
 
-namespace WordVenture.Combat.UI
+namespace Combat.UI
 {
 
     public class CombineZone : MonoBehaviour
@@ -43,7 +42,7 @@ namespace WordVenture.Combat.UI
             }
         }
 
-        [SerializeField] WordVenture.Combat.MagicAffinityTable magicAffinityTable;
+        [SerializeField] MagicAffinityTable magicAffinityTable;
 
         public Button activateButton;
         [FormerlySerializedAs("Shoot")] public GameObject shoot;
@@ -105,8 +104,8 @@ namespace WordVenture.Combat.UI
         {
             InitSelectableObjectList();
             SetAllSelectable(true);
-            Cards.MagicType spellType = spellCards[0].GetComponent<WordVenture.Cards.Card>().cardType;
-            Cards.MagicType magicType = magicTypeCards[0].GetComponent<WordVenture.Cards.Card>().cardType;
+            Cards.MagicType spellType = spellCards[0].GetComponent<Card>().cardType;
+            Cards.MagicType magicType = magicTypeCards[0].GetComponent<Card>().cardType;
 
             while (target == null)
             {
@@ -116,16 +115,16 @@ namespace WordVenture.Combat.UI
             Player.PlayerInt().AttackAnima();
             yield return new WaitForSeconds(0.5f);
             magicEffectSource.Play();
-            if (spellType == WordVenture.Cards.MagicType.Shoot)
+            if (spellType == MagicType.Shoot)
             {
 
                 shoot.GetComponent<Shoot>().Run(magicType, target, magicAffinityTable);
             }
-            else if (spellType == WordVenture.Cards.MagicType.Drop)
+            else if (spellType == MagicType.Drop)
             {
                 drop.GetComponent<Drop>().Run(magicType, target, magicAffinityTable);
             }
-            else if (spellType == WordVenture.Cards.MagicType.Summon)
+            else if (spellType == MagicType.Summon)
             {
                 summon.GetComponent<Summon>().Run(magicType, target, magicAffinityTable);
             }
@@ -145,8 +144,8 @@ namespace WordVenture.Combat.UI
             {
                 if(card != null)
                 {
-                    WordVenture.Cards.Card spellCard = card.GetComponent<WordVenture.Cards.Card>();
-                    WordVenture.Cards.CardManager.Inst.PopCard(spellCard);
+                    Card spellCard = card.GetComponent<Card>();
+                    CardManager.Inst.PopCard(spellCard);
                     Destroy(card);
                 }
 
@@ -155,13 +154,13 @@ namespace WordVenture.Combat.UI
             {
                 if(card != null)
                 {
-                    WordVenture.Cards.Card magicTypeCard = card.GetComponent<WordVenture.Cards.Card>();
-                    WordVenture.Cards.CardManager.Inst.PopCard(magicTypeCard);
+                    Card magicTypeCard = card.GetComponent<Card>();
+                    CardManager.Inst.PopCard(magicTypeCard);
                     Destroy(card);
                 }
             }
 
-            WordVenture.Cards.CardManager.Inst.CardAlignment();
+            CardManager.Inst.CardAlignment();
 
             spellCards.Clear();
             magicTypeCards.Clear();

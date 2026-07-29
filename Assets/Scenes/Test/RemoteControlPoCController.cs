@@ -2,21 +2,24 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public sealed class RemoteControlPoCController : MonoBehaviour
+namespace Scenes.Test
 {
-    [SerializeField] private Canvas canvas;
-    [SerializeField] private TMP_InputField inputField;
-    [SerializeField] private Button submitButton;
-    [SerializeField] private TMP_Text outputText;
-
-    private void Awake()
+    public sealed class RemoteControlPoCController : MonoBehaviour
     {
-        submitButton.onClick.RemoveListener(CopyInputToOutput);
-        submitButton.onClick.AddListener(CopyInputToOutput);
-    }
+        [SerializeField] private Canvas canvas;
+        [SerializeField] private TMP_InputField inputField;
+        [SerializeField] private Button submitButton;
+        [SerializeField] private TMP_Text outputText;
 
-    private void CopyInputToOutput()
-    {
-        outputText.text = inputField.text;
+        private void Awake()
+        {
+            submitButton.onClick.RemoveListener(CopyInputToOutput);
+            submitButton.onClick.AddListener(CopyInputToOutput);
+        }
+
+        private void CopyInputToOutput()
+        {
+            outputText.text = inputField.text;
+        }
     }
 }

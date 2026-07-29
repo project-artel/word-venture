@@ -1,13 +1,11 @@
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
+using Battle.Turns;
+using Cards;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Stage;
-using WordVenture.Combat.UI;
 
-namespace WordVenture.Combat.Enemies
+namespace Combat.Enemies
 {
     public abstract class EnemyAction
     {
@@ -66,7 +64,7 @@ namespace WordVenture.Combat.Enemies
 
         protected TMP_Text HpText;
 
-        public WordVenture.Cards.MagicType enemyType;
+        public MagicType enemyType;
 
         [SerializeField] protected int id;
         protected int Hp = 1;
@@ -151,7 +149,7 @@ namespace WordVenture.Combat.Enemies
         protected virtual void Start()
         {
             Animator = GetComponent<SlimeAnimator>();
-            turnTime = WordVenture.Battle.Turns.TurnBattleSystem.TurnTime;
+            turnTime = TurnBattleSystem.TurnTime;
         }
 
 

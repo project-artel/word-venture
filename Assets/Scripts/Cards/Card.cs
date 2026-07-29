@@ -1,10 +1,10 @@
+using Core;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
-using WordVenture.Core;
 
-namespace WordVenture.Cards
+namespace Cards
 {
     public enum MagicType
     {

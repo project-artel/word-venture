@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using System.Collections;
+using Cards;
+using Combat.Enemies;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Enemies;
 
-namespace WordVenture.Battle.Turns
+namespace Battle.Turns
 {
     public enum TurnStatus
     {

@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using System.Collections;
+using Map;
 using UnityEngine;
 
-namespace WordVenture.Core
+namespace Core
 {
 
     public class SaveLoadController : MonoBehaviour
@@ -46,7 +45,7 @@ namespace WordVenture.Core
 
         public void SavePlayData()
         {
-            PlayerPrefs.SetInt("StagePosition", WordVenture.Map.MapMove.StagePosition);
+            PlayerPrefs.SetInt("StagePosition", MapMove.StagePosition);
         }
 
         public void QuitGame()
@@ -60,8 +59,8 @@ namespace WordVenture.Core
 
         public int LoadPlayData()
         {
-            WordVenture.Map.MapMove.StagePosition = PlayerPrefs.GetInt("StagePosition", -1);
-            return WordVenture.Map.MapMove.StagePosition;
+            MapMove.StagePosition = PlayerPrefs.GetInt("StagePosition", -1);
+            return MapMove.StagePosition;
         }
 
         private void OnApplicationQuit()

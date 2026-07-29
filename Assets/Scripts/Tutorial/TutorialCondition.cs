@@ -1,8 +1,8 @@
+using Combat.Stage;
+using Combat.UI;
 using UnityEngine.SceneManagement;
-using WordVenture.Combat.Stage;
-using WordVenture.Combat.UI;
 
-namespace WordVenture.Tutorial
+namespace Tutorial
 {
     public interface ITutorialCondition
     {

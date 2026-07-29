@@ -1,16 +1,19 @@
 using UnityEngine;
 
-public sealed class KeyboardTest : MonoBehaviour
+namespace Scenes.Test
 {
-    private void Update()
+    public sealed class KeyboardTest : MonoBehaviour
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        private void Update()
         {
-            Debug.Log("Space key was pressed.");
-        }
-        if (Input.GetKeyUp(KeyCode.Return))
-        {
-            Debug.Log("Return key was released.");
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Debug.Log("Space key was pressed.");
+            }
+            if (Input.GetKeyUp(KeyCode.Return))
+            {
+                Debug.Log("Return key was released.");
+            }
         }
     }
 }

@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using System.Collections;
+using Cards;
+using Combat.Enemies;
 using UnityEngine;
 using UnityEngine.Serialization;
-using WordVenture.Cards;
-using WordVenture.Combat.Enemies;
 
-namespace WordVenture.Combat.Spells
+namespace Combat.Spells
 {
     public class Shoot : MonoBehaviour
     {
@@ -15,7 +13,7 @@ namespace WordVenture.Combat.Spells
         [FormerlySerializedAs("ShootlightningPrefab")] public GameObject shootlightningPrefab;
         [FormerlySerializedAs("ShootHolyPrefab")] public GameObject shootHolyPrefab;
 
-        public void Run(MagicType magicType1, SelectableObject target, WordVenture.Combat.MagicAffinityTable magicAffinityTable)
+        public void Run(MagicType magicType1, SelectableObject target, MagicAffinityTable magicAffinityTable)
         {
 
             GameObject prefabToInstantiate = null;
@@ -41,7 +39,7 @@ namespace WordVenture.Combat.Spells
 
             if (prefabToInstantiate != null)
             {
-                GameObject obj = Instantiate(prefabToInstantiate, WordVenture.Combat.Enemies.Player.PlayerInt().transform.position, prefabToInstantiate.transform.rotation);
+                GameObject obj = Instantiate(prefabToInstantiate, Player.PlayerInt().transform.position, prefabToInstantiate.transform.rotation);
 
                 obj.GetComponent<SpellObj>().InitSpell(MagicType.Shoot, magicType1, target, magicAffinityTable);
             }

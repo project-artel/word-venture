@@ -1,4 +1,4 @@
-namespace WordVenture.Core
+namespace Core
 {
     /// <summary>
     /// 튜토리얼 대화창처럼 화면을 점유하는 연출이 떠 있는 동안 그 뒤의 게임플레이 입력을 막는다.

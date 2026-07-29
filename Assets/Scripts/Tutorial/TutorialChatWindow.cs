@@ -1,9 +1,9 @@
 using System;
-using UnityEngine.UI;
+using Story;
 using UnityEngine;
-using WordVenture.Story;
+using UnityEngine.UI;
 
-namespace WordVenture.Tutorial
+namespace Tutorial
 {
     public static class Extensions
     {

@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
-using WordVenture.Combat.Enemies;
 
-namespace WordVenture.Combat.Stage
+namespace Combat.Stage
 {
 
     public class StageDataSingleton : MonoBehaviour

@@ -1,12 +1,13 @@
+using Cards;
+using Combat.Stage;
+using Core;
+using Map;
 using TMPro;
-using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
-using WordVenture.Cards;
-using WordVenture.Combat.Stage;
-using WordVenture.Core;
 
-namespace WordVenture.Scenes
+namespace Scenes
 {
     public class GameClearController : MonoBehaviour
     {
@@ -71,9 +72,9 @@ namespace WordVenture.Scenes
 
         void ShowGettedCard()
         {
-            print(WordVenture.Map.MapMove.StagePosition);
+            print(MapMove.StagePosition);
             print(StageDataSingleton.Instance.stagePosition);
-            if (WordVenture.Map.MapMove.StagePosition - 1 == StageDataSingleton.Instance.stagePosition)
+            if (MapMove.StagePosition - 1 == StageDataSingleton.Instance.stagePosition)
             {
                 switch (StageDataSingleton.Instance.stagePosition)
                 {

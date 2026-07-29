@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using System.Collections;
+using Cards;
+using Combat.Enemies;
 using UnityEngine;
 using UnityEngine.Serialization;
-using WordVenture.Cards;
-using WordVenture.Combat.Enemies;
 
-namespace WordVenture.Combat.Spells
+namespace Combat.Spells
 {
 
     public class Summon : MonoBehaviour
@@ -18,7 +16,7 @@ namespace WordVenture.Combat.Spells
         [FormerlySerializedAs("SummonlightningPrefab")] public GameObject summonlightningPrefab;
         [FormerlySerializedAs("SummonHolyPrefab")] public GameObject summonHolyPrefab;
 
-        public void Run(MagicType magicType, SelectableObject target, WordVenture.Combat.MagicAffinityTable magicAffinityTable)
+        public void Run(MagicType magicType, SelectableObject target, MagicAffinityTable magicAffinityTable)
         {
 
             GameObject prefabToInstantiate = null;

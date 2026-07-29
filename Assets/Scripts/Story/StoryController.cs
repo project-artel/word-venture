@@ -1,9 +1,10 @@
-using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using Map;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-namespace WordVenture.Story
+namespace Story
 {
     public class StoryController : MonoBehaviour
     {
@@ -99,7 +100,7 @@ namespace WordVenture.Story
 
         private void LoadMapScene()
         {
-            if (WordVenture.Map.MapMove.StagePosition == 5)
+            if (MapMove.StagePosition == 5)
                 SceneManager.LoadScene("TitleScene");
             else
                 SceneManager.LoadScene("Map_scene");

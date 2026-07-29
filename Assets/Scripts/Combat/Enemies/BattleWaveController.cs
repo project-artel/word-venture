@@ -1,11 +1,11 @@
-using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using Combat.Stage;
+using Map;
 using UnityEngine;
-using WordVenture.Battle.Turns;
-using WordVenture.Combat.Stage;
+using UnityEngine.SceneManagement;
 
-namespace WordVenture.Combat.Enemies
+namespace Combat.Enemies
 {
     public class BattleWaveController : MonoBehaviour
     {
@@ -17,7 +17,7 @@ namespace WordVenture.Combat.Enemies
 
         public void Start1()
         {
-            ememyPool = gameObject.GetComponent<WordVenture.Combat.Enemies.EnemyPoolController>();
+            ememyPool = gameObject.GetComponent<EnemyPoolController>();
             StartWave(wave);
         }
 
@@ -62,7 +62,7 @@ namespace WordVenture.Combat.Enemies
                 StartWave(wave);
             else
             {
-                WordVenture.Map.MapMove.StagePosition++;
+                MapMove.StagePosition++;
                 SceneManager.LoadScene("GameClearScene");
             }
         }

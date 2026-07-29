@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using System.Collections;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
-using WordVenture.Combat.Enemies;
 
-namespace WordVenture.Combat.Stage
+namespace Combat.Stage
 {
 
 

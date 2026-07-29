@@ -1,12 +1,8 @@
-using System.Collections.Generic;
-using System.Collections;
+using Combat.UI;
+using Core;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Stage;
-using WordVenture.Combat.UI;
-using WordVenture.Core;
 
-namespace WordVenture.Combat.Enemies
+namespace Combat.Enemies
 {
 
     public class SelectableObject : MonoBehaviour

@@ -1,14 +1,8 @@
-using System.Collections.Generic;
-using System.Collections;
-using Unity.VisualScripting;
-using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.Serialization;
-using WordVenture.Cards;
-using WordVenture.Combat.Enemies;
-using WordVenture.Combat.Spells;
+using UnityEngine.UI;
 
-namespace WordVenture.Combat.UI
+namespace Combat.UI
 {
 
     public class CombineButton : MonoBehaviour

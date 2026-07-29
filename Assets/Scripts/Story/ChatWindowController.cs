@@ -2,7 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-namespace WordVenture.Story
+namespace Story
 {
 
     public class ChatWindowController : MonoBehaviour

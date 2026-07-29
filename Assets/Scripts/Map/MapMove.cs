@@ -1,15 +1,12 @@
+using Combat.Stage;
+using Core;
 using DG.Tweening;
-using System.Collections.Generic;
-using System.Collections;
 using TMPro;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
-using WordVenture.Combat.Stage;
-using WordVenture.Core;
 
-namespace WordVenture.Map
+namespace Map
 {
     public class MapMove : MonoBehaviour
     {
