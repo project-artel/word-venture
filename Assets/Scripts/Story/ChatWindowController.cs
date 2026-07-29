@@ -7,7 +7,7 @@ namespace WordVenture.Story
 
     public class ChatWindowController : MonoBehaviour
     {
-        private const float TEXT_STREAM_INTERVAL = 0.03f;
+        private const float TextStreamInterval = 0.03f;
 
         [SerializeField] GameObject anyKeyPrompt;
 
@@ -58,7 +58,7 @@ namespace WordVenture.Story
         {
             for (int i = 0; i < streamingText.Length; i++)
             {
-                yield return new WaitForSeconds(TEXT_STREAM_INTERVAL);
+                yield return new WaitForSeconds(TextStreamInterval);
                 chatText.SetText(streamingText.Substring(0, i));
             }
 

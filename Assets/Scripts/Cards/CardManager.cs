@@ -7,6 +7,7 @@ using System.Numerics;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Vector3 = UnityEngine.Vector3;
 using WordVenture.Combat.UI;
 using WordVenture.Core;
@@ -18,15 +19,15 @@ namespace WordVenture.Cards
         public static CardManager Inst {get; private set;}
         void Awake() => Inst = this;
 
-        [SerializeField] WordScriptableObject wordSO;
+        [FormerlySerializedAs("wordSO")] [SerializeField] WordScriptableObject wordSo;
         [SerializeField] GameObject cardPrefab;
         [SerializeField] List<Card> myCards;
         [SerializeField] Transform cardSpawnPoint;
-        [SerializeField] Transform CardLeft;
-        [SerializeField] Transform CardRight;
-        [SerializeField] GameObject PushArea1;
-        [SerializeField] GameObject PushArea2;
-        [SerializeField] GameObject PushArea3;
+        [FormerlySerializedAs("CardLeft")] [SerializeField] Transform cardLeft;
+        [FormerlySerializedAs("CardRight")] [SerializeField] Transform cardRight;
+        [FormerlySerializedAs("PushArea1")] [SerializeField] GameObject pushArea1;
+        [FormerlySerializedAs("PushArea2")] [SerializeField] GameObject pushArea2;
+        [FormerlySerializedAs("PushArea3")] [SerializeField] GameObject pushArea3;
 
         List<Word> wordBuffer;
         public Card selectCard;
@@ -50,9 +51,9 @@ namespace WordVenture.Cards
         void SetupWordBuffer()
         {
             wordBuffer = new List<Word>();
-            for (int i = 0; i < wordSO.words.Length; i++)
+            for (int i = 0; i < wordSo.words.Length; i++)
             {
-                Word word = wordSO.words[i];
+                Word word = wordSo.words[i];
                 for (int j = 0;j < word.percent;j++)
                     wordBuffer.Add(word);
             }
@@ -107,9 +108,9 @@ namespace WordVenture.Cards
             CardAlignment();
         }
 
-        public void PopCard(Card Card)
+        public void PopCard(Card card)
         {
-            myCards.Remove(Card);
+            myCards.Remove(card);
         }
 
         void SetOriginOrder()
@@ -124,8 +125,8 @@ namespace WordVenture.Cards
 
         public void CardAlignment()
         {
-            List<PRS> originCardPRSs = new List<PRS>();
-            originCardPRSs = RoundAlignment(CardLeft, CardRight, myCards.Count, 0.5f, new Vector3(1.896733f, 2.1f, 1) * 0.2f);
+            List<Prs> originCardPrSs = new List<Prs>();
+            originCardPrSs = RoundAlignment(cardLeft, cardRight, myCards.Count, 0.5f, new Vector3(1.896733f, 2.1f, 1) * 0.2f);
 
             var targetCards = myCards;
 
@@ -133,19 +134,19 @@ namespace WordVenture.Cards
             {
                 var targetCard = targetCards[i];
 
-                targetCard.originPRS = originCardPRSs[i];
+                targetCard.originPrs = originCardPrSs[i];
                 //targetCard.originPRS = new PRS(Vector3.zero, Util.QI, new Vector3(1.896733f, 2.910432f, 1));
-                targetCard.MoveTransform(targetCard.originPRS,true,0.7f);
+                targetCard.MoveTransform(targetCard.originPrs,true,0.7f);
             }
 
             CombineZone.Instance.spellCards.Clear();
             CombineZone.Instance.magicTypeCards.Clear();
         }
 
-        List<PRS> RoundAlignment(Transform Left, Transform Right, int objCount, float height, Vector3 scale)
+        List<Prs> RoundAlignment(Transform left, Transform right, int objCount, float height, Vector3 scale)
         {
             float[] objLerps = new float[objCount];
-            List<PRS> results = new List<PRS>(objCount);
+            List<Prs> results = new List<Prs>(objCount);
 
             float interval = 1f / (objCount+1);
             for (int i = 0;i < objCount;i++)
@@ -153,7 +154,7 @@ namespace WordVenture.Cards
 
             for (int i = 0;i< objCount;i++)
             {
-                var targetPos = Vector3.Lerp(Left.position, Right.position, objLerps[i]);
+                var targetPos = Vector3.Lerp(left.position, right.position, objLerps[i]);
                 targetPos.y += 0.5f;
                 var targetRot = Quaternion.identity;
 
@@ -161,7 +162,7 @@ namespace WordVenture.Cards
                 // targetPos.y += curve;
                 // targetRot = Quaternion.Slerp(Left.rotation, Right.rotation, objLerps[i]);
 
-                results.Add(new PRS(targetPos, targetRot, scale));
+                results.Add(new Prs(targetPos, targetRot, scale));
             }
             return results;
         }
@@ -173,54 +174,54 @@ namespace WordVenture.Cards
             switch(WordVenture.Map.MapMove.StagePosition)
             {
                 case 0:
-                    wordSO.words[0].percent = 1;
-                    wordSO.words[1].percent = 0;
-                    wordSO.words[2].percent = 0;
-                    wordSO.words[3].percent = 1;
-                    wordSO.words[4].percent = 0;
-                    wordSO.words[5].percent = 0;
-                    wordSO.words[6].percent = 0;
-                    wordSO.words[7].percent = 0;
+                    wordSo.words[0].percent = 1;
+                    wordSo.words[1].percent = 0;
+                    wordSo.words[2].percent = 0;
+                    wordSo.words[3].percent = 1;
+                    wordSo.words[4].percent = 0;
+                    wordSo.words[5].percent = 0;
+                    wordSo.words[6].percent = 0;
+                    wordSo.words[7].percent = 0;
                     break;
                 case 1:
-                    wordSO.words[0].percent = 1;
-                    wordSO.words[1].percent = 0;
-                    wordSO.words[2].percent = 1;
-                    wordSO.words[3].percent = 2;
-                    wordSO.words[4].percent = 0;
-                    wordSO.words[5].percent = 0;
-                    wordSO.words[6].percent = 0;
-                    wordSO.words[7].percent = 0;
+                    wordSo.words[0].percent = 1;
+                    wordSo.words[1].percent = 0;
+                    wordSo.words[2].percent = 1;
+                    wordSo.words[3].percent = 2;
+                    wordSo.words[4].percent = 0;
+                    wordSo.words[5].percent = 0;
+                    wordSo.words[6].percent = 0;
+                    wordSo.words[7].percent = 0;
                     break;
                 case 2:
-                    wordSO.words[0].percent = 1;
-                    wordSO.words[1].percent = 0;
-                    wordSO.words[2].percent = 1;
-                    wordSO.words[3].percent = 1;
-                    wordSO.words[4].percent = 0;
-                    wordSO.words[5].percent = 1;
-                    wordSO.words[6].percent = 0;
-                    wordSO.words[7].percent = 0;
+                    wordSo.words[0].percent = 1;
+                    wordSo.words[1].percent = 0;
+                    wordSo.words[2].percent = 1;
+                    wordSo.words[3].percent = 1;
+                    wordSo.words[4].percent = 0;
+                    wordSo.words[5].percent = 1;
+                    wordSo.words[6].percent = 0;
+                    wordSo.words[7].percent = 0;
                     break;
                 case 3:
-                    wordSO.words[0].percent = 2;
-                    wordSO.words[1].percent = 0;
-                    wordSO.words[2].percent = 2;
-                    wordSO.words[3].percent = 1;
-                    wordSO.words[4].percent = 1;
-                    wordSO.words[5].percent = 1;
-                    wordSO.words[6].percent = 0;
-                    wordSO.words[7].percent = 1;
+                    wordSo.words[0].percent = 2;
+                    wordSo.words[1].percent = 0;
+                    wordSo.words[2].percent = 2;
+                    wordSo.words[3].percent = 1;
+                    wordSo.words[4].percent = 1;
+                    wordSo.words[5].percent = 1;
+                    wordSo.words[6].percent = 0;
+                    wordSo.words[7].percent = 1;
                     break;
                 case 4:
-                    wordSO.words[0].percent = 5;
-                    wordSO.words[1].percent = 5;
-                    wordSO.words[2].percent = 5;
-                    wordSO.words[3].percent = 3;
-                    wordSO.words[4].percent = 3;
-                    wordSO.words[5].percent = 3;
-                    wordSO.words[6].percent = 3;
-                    wordSO.words[7].percent = 3;
+                    wordSo.words[0].percent = 5;
+                    wordSo.words[1].percent = 5;
+                    wordSo.words[2].percent = 5;
+                    wordSo.words[3].percent = 3;
+                    wordSo.words[4].percent = 3;
+                    wordSo.words[5].percent = 3;
+                    wordSo.words[6].percent = 3;
+                    wordSo.words[7].percent = 3;
                     break;
                 default:
                     break;
@@ -255,18 +256,18 @@ namespace WordVenture.Cards
             isMyCardDrag = false;
             if (onPushArea1 && selectCard.CompareTag("Spell") && CombineZone.Instance.spellCards.Count == 0)
             {
-                PushArea1.GetComponent<DropZone>().GetCard(selectCard.gameObject);
-                selectCard.MoveTransform(new PRS(PushArea1.transform.position, Util.QI, selectCard.originPRS.scale), false);
+                pushArea1.GetComponent<DropZone>().GetCard(selectCard.gameObject);
+                selectCard.MoveTransform(new Prs(pushArea1.transform.position, Util.Qi, selectCard.originPrs.scale), false);
             }
             else if (onPushArea2 && selectCard.CompareTag("MagicType") && CombineZone.Instance.magicTypeCards.Count == 0)
             {
-                PushArea2.GetComponent<DropZone>().GetCard(selectCard.gameObject);
-                selectCard.MoveTransform(new PRS(PushArea2.transform.position, Util.QI, selectCard.originPRS.scale), false);
+                pushArea2.GetComponent<DropZone>().GetCard(selectCard.gameObject);
+                selectCard.MoveTransform(new Prs(pushArea2.transform.position, Util.Qi, selectCard.originPrs.scale), false);
             }
             else if (onPushArea3 && selectCard.CompareTag("Target"))
             {
-                PushArea3.GetComponent<DropZone>().GetCard(selectCard.gameObject);
-                selectCard.MoveTransform(new PRS(PushArea3.transform.position, Util.QI, selectCard.originPRS.scale), false);
+                pushArea3.GetComponent<DropZone>().GetCard(selectCard.gameObject);
+                selectCard.MoveTransform(new Prs(pushArea3.transform.position, Util.Qi, selectCard.originPrs.scale), false);
             }
             else
             {
@@ -279,26 +280,26 @@ namespace WordVenture.Cards
                     CombineZone.Instance.magicTypeCards.Clear();
                 }
 
-                selectCard.MoveTransform(selectCard.originPRS, false);
+                selectCard.MoveTransform(selectCard.originPrs, false);
             }
         }
 
         void DragCard()
         {
-            selectCard.MoveTransform(new PRS(Util.MousePos, Util.QI, selectCard.originPRS.scale), false);
+            selectCard.MoveTransform(new Prs(Util.MousePos, Util.Qi, selectCard.originPrs.scale), false);
         }
 
         void DetectCardArea()
         {
             RaycastHit2D[] hits = Physics2D.RaycastAll(Util.MousePos, Vector3.forward);
-            int Cardlayer = LayerMask.NameToLayer("CardArea");
-            int Pushlayer1 = LayerMask.NameToLayer("PushArea1");
-            int Pushlayer2 = LayerMask.NameToLayer("PushArea2");
-            int Pushlayer3 = LayerMask.NameToLayer("PushArea3");
-            onCardArea = Array.Exists(hits, x => x.collider.gameObject.layer == Cardlayer);
-            onPushArea1 = Array.Exists(hits, x => x.collider.gameObject.layer == Pushlayer1);
-            onPushArea2 = Array.Exists(hits, x => x.collider.gameObject.layer == Pushlayer2);
-            onPushArea3 = Array.Exists(hits, x => x.collider.gameObject.layer == Pushlayer3);
+            int cardlayer = LayerMask.NameToLayer("CardArea");
+            int pushlayer1 = LayerMask.NameToLayer("PushArea1");
+            int pushlayer2 = LayerMask.NameToLayer("PushArea2");
+            int pushlayer3 = LayerMask.NameToLayer("PushArea3");
+            onCardArea = Array.Exists(hits, x => x.collider.gameObject.layer == cardlayer);
+            onPushArea1 = Array.Exists(hits, x => x.collider.gameObject.layer == pushlayer1);
+            onPushArea2 = Array.Exists(hits, x => x.collider.gameObject.layer == pushlayer2);
+            onPushArea3 = Array.Exists(hits, x => x.collider.gameObject.layer == pushlayer3);
         }
 
         void EnlargeCard(bool isEnlarge, Card card)

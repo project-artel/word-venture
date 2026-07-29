@@ -21,15 +21,15 @@ namespace WordVenture.Combat.Enemies
             base.Attack(distanceToPlayer);
             if (distanceToPlayer < attackRange)
             {
-                Player.PlayerInt().TakeHit(damage);
+                Player.PlayerInt().TakeHit(Damage);
             }
         }
         protected override void StopMove()
         {
             base.StopMove();
-            animator.RangeAttack();
+            Animator.RangeAttack();
             GameObject projectile = Instantiate(fireShoot, transform.position, Quaternion.identity);
-            projectile.GetComponent<EnemyProjectile>().InitProjectileDamage((int) (damage * 0.7f));
+            projectile.GetComponent<EnemyProjectile>().InitProjectileDamage((int) (Damage * 0.7f));
         }
 
 

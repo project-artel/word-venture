@@ -19,7 +19,7 @@ namespace WordVenture.Combat.Enemies
             base.Attack(distanceToPlayer);
             if (distanceToPlayer < attackRange)
             {
-                Player.PlayerInt().TakeHit(damage);
+                Player.PlayerInt().TakeHit(Damage);
             }
         }
     }

@@ -7,13 +7,13 @@ using WordVenture.Core;
 namespace WordVenture.Cards
 {
     [System.Serializable]
-    public class PRS
+    public class Prs
     {
         public Vector3 pos;
         public Quaternion rot;
         public Vector3 scale;
 
-        public PRS(Vector3 pos, Quaternion rot, Vector3 scale)
+        public Prs(Vector3 pos, Quaternion rot, Vector3 scale)
         {
             this.pos = pos;
             this.rot = rot;
@@ -23,7 +23,7 @@ namespace WordVenture.Cards
 
     public class Util : MonoBehaviour
     {
-        public static Quaternion QI => Quaternion.identity;
+        public static Quaternion Qi => Quaternion.identity;
 
         public static Vector3 MousePos
         {

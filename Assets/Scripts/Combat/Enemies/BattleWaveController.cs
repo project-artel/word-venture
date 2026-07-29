@@ -28,7 +28,7 @@ namespace WordVenture.Combat.Enemies
             for (int i = 0; i < battleWaveData.enemySpawnDatasInWave.Count; i++)
             {
                 print(i);
-                activatedEnemies.Add(ememyPool.SpawnObject(battleWaveData.enemySpawnDatasInWave[i].SpawnPositionX, i , battleWaveData.enemySpawnDatasInWave[i].EnemyId));
+                activatedEnemies.Add(ememyPool.SpawnObject(battleWaveData.enemySpawnDatasInWave[i].spawnPositionX, i , battleWaveData.enemySpawnDatasInWave[i].enemyId));
             }
 
             StartCoroutine(WaveEndSensor());

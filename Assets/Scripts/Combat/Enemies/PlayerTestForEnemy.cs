@@ -16,29 +16,29 @@ namespace WordVenture.Combat.Enemies
 
         public static Player PlayerInt()
         {
-            return instance;
+            return _instance;
         }
 
-        static Player instance;
+        static Player _instance;
 
-        protected TMP_Text hpText;
+        protected TMP_Text HpText;
 
-        protected int hp = 100;
-        protected int maxHp = 100;
-        protected int damage;
+        protected int Hp = 100;
+        protected int MaxHp = 100;
+        protected int Damage;
 
         public int shield = 0;
 
         public void UpdateIndicator()
         {
-            hpText.SetText(hp.ToString());
+            HpText.SetText(Hp.ToString());
         }
 
         private void Awake()
         {
             InitIndicators();
             animator = GetComponent<Animator>();
-            instance = this;
+            _instance = this;
         }
 
         public void AttackAnima()
@@ -56,8 +56,8 @@ namespace WordVenture.Combat.Enemies
 
         public void TakeHit(int damage)
         {
-            hp -= damage;
-            if (hp <= 0)
+            Hp -= damage;
+            if (Hp <= 0)
             {
                 Death();
                 return;
@@ -75,9 +75,9 @@ namespace WordVenture.Combat.Enemies
 
         private void InitIndicators()
         {
-            hpText = gameObject.GetComponentInChildren<TMP_Text>();
+            HpText = gameObject.GetComponentInChildren<TMP_Text>();
 
-            hpText.SetText(maxHp.ToString());
+            HpText.SetText(MaxHp.ToString());
         }
     }
 }

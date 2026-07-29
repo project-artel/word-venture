@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WordVenture.Cards;
 using WordVenture.Combat.Enemies;
 using WordVenture.Combat.Spells;
@@ -12,7 +13,7 @@ namespace WordVenture.Combat.UI
 
     public class CombineButton : MonoBehaviour
     {
-        public GameObject CombineZone;
+        [FormerlySerializedAs("CombineZone")] public GameObject combineZone;
         public Button activateButton; // 버튼 참조
 
         //void Start()
@@ -31,13 +32,13 @@ namespace WordVenture.Combat.UI
 
         public void OnButtonClick()
         {
-            if (!CombineZone.activeSelf)
+            if (!combineZone.activeSelf)
             {
-                CombineZone.SetActive(true);
+                combineZone.SetActive(true);
             }
-            else if (CombineZone.activeSelf)
+            else if (combineZone.activeSelf)
             {
-                CombineZone.SetActive(false);
+                combineZone.SetActive(false);
             }
         }
     }

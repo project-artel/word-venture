@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WordVenture.Cards;
 using WordVenture.Combat.Enemies;
 
@@ -11,13 +12,13 @@ namespace WordVenture.Combat.Spells
     {
         public GameObject player;
         private float summonRadius = 2.0f;
-        public GameObject SummonfirePrefab;
-        public GameObject SummonicePrefab;
-        public GameObject SummonrockPrefab;
-        public GameObject SummonlightningPrefab;
-        public GameObject SummonHolyPrefab;
+        [FormerlySerializedAs("SummonfirePrefab")] public GameObject summonfirePrefab;
+        [FormerlySerializedAs("SummonicePrefab")] public GameObject summonicePrefab;
+        [FormerlySerializedAs("SummonrockPrefab")] public GameObject summonrockPrefab;
+        [FormerlySerializedAs("SummonlightningPrefab")] public GameObject summonlightningPrefab;
+        [FormerlySerializedAs("SummonHolyPrefab")] public GameObject summonHolyPrefab;
 
-        public void summon(MagicType magicType, SelectableObject target, WordVenture.Combat.MagicAffinityTable magicAffinityTable)
+        public void Run(MagicType magicType, SelectableObject target, WordVenture.Combat.MagicAffinityTable magicAffinityTable)
         {
 
             GameObject prefabToInstantiate = null;
@@ -25,19 +26,19 @@ namespace WordVenture.Combat.Spells
             switch (magicType)
             {
                 case MagicType.Fire:
-                    prefabToInstantiate = SummonfirePrefab;
+                    prefabToInstantiate = summonfirePrefab;
                     break;
                 case MagicType.Ice:
-                    prefabToInstantiate = SummonicePrefab;
+                    prefabToInstantiate = summonicePrefab;
                     break;
                 case MagicType.Rock:
-                    prefabToInstantiate = SummonrockPrefab;
+                    prefabToInstantiate = summonrockPrefab;
                     break;
                 case MagicType.Lightning:
-                    prefabToInstantiate = SummonlightningPrefab;
+                    prefabToInstantiate = summonlightningPrefab;
                     break;
                 case MagicType.Holy:
-                    prefabToInstantiate = SummonHolyPrefab;
+                    prefabToInstantiate = summonHolyPrefab;
                     break;
             }
 

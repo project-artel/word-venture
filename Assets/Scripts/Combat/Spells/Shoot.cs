@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WordVenture.Cards;
 using WordVenture.Combat.Enemies;
 
@@ -8,13 +9,13 @@ namespace WordVenture.Combat.Spells
 {
     public class Shoot : MonoBehaviour
     {
-        public GameObject ShootfirePrefab;
-        public GameObject ShooticePrefab;
-        public GameObject ShootrockPrefab;
-        public GameObject ShootlightningPrefab;
-        public GameObject ShootHolyPrefab;
+        [FormerlySerializedAs("ShootfirePrefab")] public GameObject shootfirePrefab;
+        [FormerlySerializedAs("ShooticePrefab")] public GameObject shooticePrefab;
+        [FormerlySerializedAs("ShootrockPrefab")] public GameObject shootrockPrefab;
+        [FormerlySerializedAs("ShootlightningPrefab")] public GameObject shootlightningPrefab;
+        [FormerlySerializedAs("ShootHolyPrefab")] public GameObject shootHolyPrefab;
 
-        public void shoot(MagicType magicType1, SelectableObject target, WordVenture.Combat.MagicAffinityTable magicAffinityTable)
+        public void Run(MagicType magicType1, SelectableObject target, WordVenture.Combat.MagicAffinityTable magicAffinityTable)
         {
 
             GameObject prefabToInstantiate = null;
@@ -22,19 +23,19 @@ namespace WordVenture.Combat.Spells
             switch (magicType1)
             {
                 case MagicType.Fire:
-                    prefabToInstantiate = ShootfirePrefab;
+                    prefabToInstantiate = shootfirePrefab;
                     break;
                 case MagicType.Ice:
-                    prefabToInstantiate = ShooticePrefab;
+                    prefabToInstantiate = shooticePrefab;
                     break;
                 case MagicType.Rock:
-                    prefabToInstantiate = ShootrockPrefab;
+                    prefabToInstantiate = shootrockPrefab;
                     break;
                 case MagicType.Lightning:
-                    prefabToInstantiate = ShootlightningPrefab;
+                    prefabToInstantiate = shootlightningPrefab;
                     break;
                 case MagicType.Holy:
-                    prefabToInstantiate = ShootHolyPrefab;
+                    prefabToInstantiate = shootHolyPrefab;
                     break;
             }
 

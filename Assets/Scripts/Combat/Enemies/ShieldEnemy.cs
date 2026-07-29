@@ -25,13 +25,13 @@ namespace WordVenture.Combat.Enemies
         {
             if (other.CompareTag("Attack"))
             {
-                hp -= 1;
+                Hp -= 1;
             }
             if (other.CompareTag("Heal"))
             {
-                hp += 1;
+                Hp += 1;
             }
-            if (hp <= 0)
+            if (Hp <= 0)
             {
                 Destroy(gameObject);
             }

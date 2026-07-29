@@ -20,7 +20,7 @@ namespace WordVenture.Combat.Stage
         {
             battleWaveController = FindObjectOfType<BattleWaveController>();
 
-            int stagePosition = StageDataSingleton.Instance.StagePosition;
+            int stagePosition = StageDataSingleton.Instance.stagePosition;
             LoadStage(stagePosition);
             SetupBattle(currentStageData, stagePosition);
         }

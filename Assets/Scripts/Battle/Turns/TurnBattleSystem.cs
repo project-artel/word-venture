@@ -72,7 +72,7 @@ namespace WordVenture.Battle.Turns
 
         public static PlayerTurn PlayerTurn;
         public static EnemyTurn EnemyTurn;
-        public static float turnTime = 1f;
+        public static float TurnTime = 1f;
         Turn currentTurn;
 
         [SerializeField] public CardManager cardManager;

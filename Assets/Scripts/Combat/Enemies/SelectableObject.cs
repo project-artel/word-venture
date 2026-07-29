@@ -10,13 +10,13 @@ namespace WordVenture.Combat.Enemies
 
     public class SelectableObject : MonoBehaviour
     {
-        private Vector3 Scale;
+        private Vector3 scale;
         private bool selectable = false;
         CombineZone combineZone;
 
         private void Start()
         {
-            Scale = transform.localScale;
+            scale = transform.localScale;
             combineZone = CombineZone.Instance;
         }
 
@@ -55,9 +55,9 @@ namespace WordVenture.Combat.Enemies
         private void ChangeSize(bool bigSide)
         {
             if (bigSide)
-                transform.localScale = Scale * 1.2f;
+                transform.localScale = scale * 1.2f;
             else
-                transform.localScale = Scale;
+                transform.localScale = scale;
         }
     }
 

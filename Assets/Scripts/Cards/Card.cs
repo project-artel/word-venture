@@ -1,12 +1,7 @@
 using DG.Tweening;
-using JetBrains.Annotations;
-using System.Collections.Generic;
-using System.Collections;
 using TMPro;
-using UnityEngine.EventSystems;
 using UnityEngine;
-using WordVenture.Combat.UI;
-using WordVenture.Core;
+using UnityEngine.Serialization;
 
 namespace WordVenture.Cards
 {
@@ -26,27 +21,27 @@ namespace WordVenture.Cards
     public class Card : MonoBehaviour
     {
         [SerializeField] TMP_Text nameTMP;
-        [SerializeField] Sprite MagicCard;
-        [SerializeField] Sprite TypeCard;
+        [SerializeField] Sprite magicCard;
+        [SerializeField] Sprite typeCard;
 
         public MagicType cardType;
 
         public Word word;
-        public PRS originPRS;
+        public Prs originPrs;
 
         public void Setup(Word word)
         {
             this.word = word;
             if (word.tag == "Spell")
-                this.GetComponent<SpriteRenderer>().sprite = MagicCard;
+                this.GetComponent<SpriteRenderer>().sprite = magicCard;
             else
-                this.GetComponent<SpriteRenderer>().sprite = TypeCard;
+                this.GetComponent<SpriteRenderer>().sprite = typeCard;
             nameTMP.text = this.word.name;
             cardType = this.word.magicType;
             gameObject.tag = this.word.tag;
         }
 
-        public void MoveTransform(PRS prs, bool useDotween, float dotweenTime = 0)
+        public void MoveTransform(Prs prs, bool useDotween, float dotweenTime = 0)
         {
             if (useDotween)
             {

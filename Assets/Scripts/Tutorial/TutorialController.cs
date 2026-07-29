@@ -38,7 +38,7 @@ namespace WordVenture.Tutorial
                 return;
             }
             StoryTelling();
-            tutorialCondition = new TutorialConditon_002();
+            tutorialCondition = new TutorialConditon002();
         }
 
         public void OnTriggerTutorial()
@@ -65,7 +65,7 @@ namespace WordVenture.Tutorial
 
         public void ProceedTutorial()
         {
-            if(tutorialCondition.isMeetCondition())
+            if(tutorialCondition.IsMeetCondition())
             {
                 OnTriggerTutorial();
             }

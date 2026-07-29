@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WordVenture.Cards;
 using WordVenture.Combat.Enemies;
 using WordVenture.Combat.Spells;
@@ -45,9 +46,9 @@ namespace WordVenture.Combat.UI
         [SerializeField] WordVenture.Combat.MagicAffinityTable magicAffinityTable;
 
         public Button activateButton;
-        public GameObject Shoot;
-        public GameObject Drop;
-        public GameObject Summon;
+        [FormerlySerializedAs("Shoot")] public GameObject shoot;
+        [FormerlySerializedAs("Drop")] public GameObject drop;
+        [FormerlySerializedAs("Summon")] public GameObject summon;
 
         private void Awake()
         {
@@ -104,29 +105,29 @@ namespace WordVenture.Combat.UI
         {
             InitSelectableObjectList();
             SetAllSelectable(true);
-            WordVenture.Cards.MagicType spellType = spellCards[0].GetComponent<WordVenture.Cards.Card>().cardType;
-            WordVenture.Cards.MagicType magicType = magicTypeCards[0].GetComponent<WordVenture.Cards.Card>().cardType;
+            Cards.MagicType spellType = spellCards[0].GetComponent<WordVenture.Cards.Card>().cardType;
+            Cards.MagicType magicType = magicTypeCards[0].GetComponent<WordVenture.Cards.Card>().cardType;
 
             while (target == null)
             {
                 yield return new WaitForSeconds(0.01f);
             }
 
-            WordVenture.Combat.Enemies.Player.PlayerInt().AttackAnima();
+            Player.PlayerInt().AttackAnima();
             yield return new WaitForSeconds(0.5f);
             magicEffectSource.Play();
             if (spellType == WordVenture.Cards.MagicType.Shoot)
             {
 
-                Shoot.GetComponent<Shoot>().shoot(magicType, target, magicAffinityTable);
+                shoot.GetComponent<Shoot>().Run(magicType, target, magicAffinityTable);
             }
             else if (spellType == WordVenture.Cards.MagicType.Drop)
             {
-                Drop.GetComponent<Drop>().drop(magicType, target, magicAffinityTable);
+                drop.GetComponent<Drop>().Run(magicType, target, magicAffinityTable);
             }
             else if (spellType == WordVenture.Cards.MagicType.Summon)
             {
-                Summon.GetComponent<Summon>().summon(magicType, target, magicAffinityTable);
+                summon.GetComponent<Summon>().Run(magicType, target, magicAffinityTable);
             }
             SetAllSelectable(false);
 
