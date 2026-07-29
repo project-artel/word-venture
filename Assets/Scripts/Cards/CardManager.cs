@@ -86,6 +86,14 @@ namespace WordVenture.Cards
             //if (Input.GetKeyDown(KeyCode.Space) && !isMyCardDrag)
             //    AddCard();
 
+            // 대화창이 떠 있는 동안 잡고 있던 카드는 놓지 못한다. 마우스 버튼을 떼는 입력도
+            // 막히기 때문에, 잠기는 순간 드래그를 취소해 카드가 커서에 붙어 있지 않게 한다.
+            if (InteractionLock.IsLocked)
+            {
+                CancelDrag();
+                return;
+            }
+
             DetectCardArea();
             if (isMyCardDrag)
             {
@@ -280,6 +288,20 @@ namespace WordVenture.Cards
                     CombineZone.Instance.magicTypeCards.Clear();
                 }
 
+                selectCard.MoveTransform(selectCard.originPrs, false);
+            }
+        }
+
+        void CancelDrag()
+        {
+            if (!isMyCardDrag)
+            {
+                return;
+            }
+
+            isMyCardDrag = false;
+            if (selectCard != null)
+            {
                 selectCard.MoveTransform(selectCard.originPrs, false);
             }
         }

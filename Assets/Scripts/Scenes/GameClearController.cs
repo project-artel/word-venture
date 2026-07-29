@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using WordVenture.Cards;
 using WordVenture.Combat.Stage;
+using WordVenture.Core;
 
 namespace WordVenture.Scenes
 {
@@ -33,6 +34,11 @@ namespace WordVenture.Scenes
 
         void Update()
         {
+            // 튜토리얼 대사를 넘기는 키가 클리어 화면 진행으로도 먹히면 안 된다.
+            if (InteractionLock.IsLocked)
+            {
+                return;
+            }
 
             if (sceneName == "GameClearScene")
             {

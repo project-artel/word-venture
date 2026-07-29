@@ -43,6 +43,12 @@ namespace WordVenture.Map
 
         void CharacterMove()
         {
+            // 튜토리얼 대사를 넘기는 키가 스테이지 이동·입장으로도 먹히면 안 된다.
+            if (InteractionLock.IsLocked)
+            {
+                return;
+            }
+
             if (position == 0)
             {
                 if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && StagePosition >= 1)

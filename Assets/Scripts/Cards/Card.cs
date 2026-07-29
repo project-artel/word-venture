@@ -2,6 +2,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using WordVenture.Core;
 
 namespace WordVenture.Cards
 {
@@ -59,6 +60,11 @@ namespace WordVenture.Cards
 
         void OnMouseOver()
         {
+            if (InteractionLock.IsLocked)
+            {
+                return;
+            }
+
             CardManager.Inst.CardMouseOver(this);
         }
 
@@ -69,6 +75,12 @@ namespace WordVenture.Cards
 
         void OnMouseDown()
         {
+            // 튜토리얼 대화창은 UI라서 콜라이더 클릭을 가리지 못한다. 직접 막는다.
+            if (InteractionLock.IsLocked)
+            {
+                return;
+            }
+
             // CardManager.Inst.CardMouseDown();
             // CardManager.Inst.selectCard = this;
             CheckHighestCard();
@@ -76,6 +88,11 @@ namespace WordVenture.Cards
 
         void OnMouseUp()
         {
+            if (InteractionLock.IsLocked)
+            {
+                return;
+            }
+
             CardManager.Inst.CardMouseUp();
             CardManager.Inst.selectCard = this;
         }

@@ -4,6 +4,7 @@ using UnityEngine;
 using WordVenture.Cards;
 using WordVenture.Combat.Stage;
 using WordVenture.Combat.UI;
+using WordVenture.Core;
 
 namespace WordVenture.Combat.Enemies
 {
@@ -32,7 +33,7 @@ namespace WordVenture.Combat.Enemies
 
         private void OnMouseEnter()
         {
-            if (selectable)
+            if (selectable && !InteractionLock.IsLocked)
             {
                 ChangeSize(true);
             }
@@ -40,7 +41,8 @@ namespace WordVenture.Combat.Enemies
 
         private void OnMouseDown()
         {
-            if (selectable)
+            // 대화창 뒤의 대상 선택을 막는다. UI는 콜라이더 클릭을 가리지 못한다.
+            if (selectable && !InteractionLock.IsLocked)
             {
                 combineZone.SetTarget(this);
             }
