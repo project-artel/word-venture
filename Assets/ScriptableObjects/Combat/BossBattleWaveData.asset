@@ -17,7 +17,7 @@ MonoBehaviour:
     - spawnPositionX: 7
       enemyId: 12
     - spawnPositionX: 6
-      enemyId: 13
+      enemyId: 12
   - enemySpawnDatasInWave:
     - spawnPositionX: 7
       enemyId: 12
@@ -28,7 +28,7 @@ MonoBehaviour:
       enemyId: 12
     - spawnPositionX: 6
       enemyId: 13
-    - spawnPositionX: 7
+    - spawnPositionX: 5
       enemyId: 14
   - enemySpawnDatasInWave:
     - spawnPositionX: 7
