@@ -16,7 +16,11 @@ namespace WordVenture.Tutorial
         [SerializeField] GameObject inputBlocker;
 
         [SerializeField] TutorialFlag currentFlag = TutorialFlag.FLAG_001_START_TUTORIAL;
-        [SerializeField] ITutorialCondition tutorialCondition;
+
+        // 인터페이스는 Unity가 직렬화하지 못한다. Start에서만 채우면 플레이 중 스크립트가
+        // 다시 컴파일될 때(도메인 리로드) null이 되고, Update가 매 프레임 NRE를 던진다.
+        // 필드 초기화로 두면 객체가 다시 만들어질 때 같이 복구된다.
+        ITutorialCondition tutorialCondition = new TutorialConditon002();
 
         // 대사를 다 읽었다는 확인 입력을 기다리는 중인지. 확인 입력을 받기 전에는
         // 다음 대사로 넘어가지 않는다.
@@ -44,7 +48,6 @@ namespace WordVenture.Tutorial
             }
             SetChatWindowVisible(true);
             StoryTelling();
-            tutorialCondition = new TutorialConditon002();
         }
 
         public void OnTriggerTutorial()
