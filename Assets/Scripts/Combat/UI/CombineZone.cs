@@ -2,7 +2,9 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using Cards;
+using Battle.Turns;
 using Core;
+using Combat.Allies;
 using Combat.Enemies;
 using Combat.Spells;
 using UnityEngine;
@@ -28,37 +30,17 @@ namespace Combat.UI
 
         public Transform GetTutorialTarget()
         {
-            foreach (SelectableObject selectable in allSelectableObjects)
-                if (selectable != null && selectable.gameObject.activeInHierarchy
-                    && selectable.CompareTag("Enemy") && selectable.GetSelectable())
-                    return selectable.transform;
+            if (!IsAwaitingTarget) return null;
+            foreach (GameObject enemyObject in GameObject.FindGameObjectsWithTag("Enemy"))
+            {
+                Enemy enemy = enemyObject.GetComponent<Enemy>();
+                if (enemy != null && enemy.IsAlive) return enemyObject.transform;
+            }
             return null;
         }
 
         public List<GameObject> spellCards = new List<GameObject>();
         public List<GameObject> magicTypeCards = new List<GameObject>();
-
-        private List<SelectableObject> allSelectableObjects = new List<SelectableObject>();
-
-        void InitSelectableObjectList()
-        {
-            allSelectableObjects.Clear();
-
-            GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Enemy");
-            foreach (GameObject gameObject in gameObjects)
-            {
-                allSelectableObjects.Add(gameObject.GetComponent<SelectableObject>());
-            }
-            allSelectableObjects.Add(GameObject.FindGameObjectWithTag("Me").GetComponent<SelectableObject>());
-        }
-
-        void SetAllSelectable(bool selectable)
-        {
-            foreach (SelectableObject gameObject in allSelectableObjects)
-            {
-                gameObject.SetSelectable(selectable);
-            }
-        }
 
         [SerializeField] MagicAffinityTable magicAffinityTable;
 
@@ -70,6 +52,12 @@ namespace Combat.UI
         private void Awake()
         {
             Instance = this;
+        }
+
+        // 전투 씬을 나간 뒤에도 static 참조가 파괴된 조합창을 가리키지 않게 한다.
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
         }
         // activateButton의 현재 표시 상태. SetActive를 같은 값으로 다시 부르지 않기 위해
         // 따로 들고 있는다.
@@ -91,7 +79,18 @@ namespace Combat.UI
         {
             // 카드는 ClearDropZone을 거치지 않고 빠지기도 한다. CardManager가 조합 영역
             // 밖에 카드를 놓으면 목록만 비우므로, 버튼 상태는 여기서 계속 맞춰야 한다.
-            SetActivateButtonVisible(spellCards.Count == 1 && magicTypeCards.Count == 1);
+            SetActivateButtonVisible(CanCombine());
+        }
+
+        // 아군 자리가 모두 차 있으면 Spawn은 조합할 수 없다. 턴 종료 후 아군이 공격하는 동안에는
+        // 어떤 주문도 조합할 수 없다. 그 사이에 시작한 주문은 적 턴에 날아간다.
+        bool CanCombine()
+        {
+            if (spellCards.Count != 1 || magicTypeCards.Count != 1) return false;
+            TurnBattleSystem battle = TurnBattleSystem.Instance;
+            if (battle != null && battle.IsEndingPlayerTurn) return false;
+            Card spellCard = spellCards[0] != null ? spellCards[0].GetComponent<Card>() : null;
+            return spellCard == null || spellCard.cardType != MagicType.Spawn || AllyFormation.CanSpawn;
         }
 
         private void OnDisable()
@@ -128,14 +127,14 @@ namespace Combat.UI
             {
                 magicTypeCards.Add(card);
             }
-            SetActivateButtonVisible(spellCards.Count == 1 && magicTypeCards.Count == 1);
+            SetActivateButtonVisible(CanCombine());
         }
 
         SelectableObject target = null;
 
         public void OnButtonClick()
         {
-            if (InteractionLock.IsLocked || isCasting || spellCards.Count != 1 || magicTypeCards.Count != 1) return;
+            if (InteractionLock.IsLocked || isCasting || !CanCombine()) return;
             isCasting = true;
 
             if (chargeEffect == null)
@@ -153,10 +152,14 @@ namespace Combat.UI
         }
         IEnumerator CastSpell()
         {
-            InitSelectableObjectList();
-            SetAllSelectable(true);
             Cards.MagicType spellType = spellCards[0].GetComponent<Card>().cardType;
             Cards.MagicType magicType = magicTypeCards[0].GetComponent<Card>().cardType;
+            if (spellType == MagicType.Spawn)
+            {
+                yield return CastSpawn(magicType);
+                yield break;
+            }
+
             IsAwaitingTarget = true;
 
             // 대상을 고를 때까지 기다린다. 0.01초는 프레임 간격보다 짧아 어차피 한
@@ -187,16 +190,28 @@ namespace Combat.UI
             {
                 explode.GetComponent<Explode>().Run(magicType, target, magicAffinityTable);
             }
-            SetAllSelectable(false);
-
             target = null;
+            isCasting = false;
+        }
+
+        // Spawn은 대상을 고르지 않고 워드 앞 아군 자리에 슬라임을 세운다.
+        IEnumerator CastSpawn(MagicType element)
+        {
+            Player player = Player.PlayerInt();
+            player.AttackAnima();
+            yield return new WaitForSeconds(0.5f);
+            magicEffectSource.Play();
+            if (chargeEffect != null)
+            {
+                chargeEffect.Release();
+            }
+            AllyFormation.GetOrCreate(player.transform).Spawn(element, magicAffinityTable);
             isCasting = false;
         }
 
         public void SetTarget(SelectableObject selectableObject)
         {
-            if (InteractionLock.IsLocked || !IsAwaitingTarget || selectableObject == null
-                || !selectableObject.GetSelectable()) return;
+            if (InteractionLock.IsLocked || !IsAwaitingTarget || selectableObject == null) return;
             Enemy selectedEnemy = selectableObject.GetComponent<Enemy>();
             if (selectedEnemy != null && !selectedEnemy.IsAlive) return;
             target = selectableObject;
