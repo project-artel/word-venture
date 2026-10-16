@@ -1,3 +1,6 @@
+// ARTEL_GAME_FUNCTIONS 는 cheat 기능이 들어간 ARTEL SDK(kr.artel.sdk)가 설치되어 있을 때 SDK 가 켜는 define 이다.
+// SDK 가 없거나 cheat 기능이 없는 예전 SDK 이면 define 이 없어서 이 파일 전체가 compile 에서 빠진다.
+#if ARTEL_GAME_FUNCTIONS
 using System.Collections;
 using Artel;
 using Battle.Turns;
@@ -237,3 +240,4 @@ public static class WordVentureGameFunctions
         }
     }
 }
+#endif
