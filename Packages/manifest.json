@@ -41,6 +41,6 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0",
-    "kr.artel.sdk": "file:../../../Packages/kr.artel.sdk"
+    "kr.artel.sdk": "https://github.com/project-artel/artel-sdk.git?path=/Packages/kr.artel.sdk#123ca1f7b4149a4e31e559ec4aae626cbc28701e"
   }
 }
