@@ -107,7 +107,8 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y xvfb x11-utils mesa-utils libgl1-mesa-dri libglu1-mesa libasound2t64 libxcursor1 libxrandr2 libxinerama1 libxi6
+          # Unity/WebRTC 는 libX11.so.6 외에 libX11.so 도 로드하므로 dev package 가 필요하다.
+          sudo apt-get install -y xvfb x11-utils mesa-utils libgl1-mesa-dri libglu1-mesa libasound2t64 libx11-dev libxcursor1 libxrandr2 libxinerama1 libxi6
           chmod +x Build/WordVenture.x86_64
           if [[ -f Build/UnityCrashHandler64 ]]; then chmod +x Build/UnityCrashHandler64; fi
           Xvfb "$DISPLAY" -screen 0 1280x720x24 -ac +extension GLX +render -noreset > "$RUNNER_TEMP/artel-xvfb.log" 2>&1 &

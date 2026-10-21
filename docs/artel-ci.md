@@ -37,6 +37,7 @@ artifact에 저장한 뒤 Linux runner로 전달합니다.
 QA job은 Ubuntu 24.04에서 Xvfb의 1280×720 가상 화면과 Mesa software rendering을 사용합니다.
 artifact 다운로드 후 실행 권한을 복원하고, display와 OpenGL 초기화를 확인한 뒤 게임을 실행합니다.
 `artel-linux-rendering` artifact에는 Xvfb 및 OpenGL 진단 로그가 저장됩니다.
+Unity/WebRTC가 `libX11.so`를 직접 로드하므로 runtime library와 함께 `libx11-dev`도 설치합니다.
 
 ARTEL SDK는 `Packages/manifest.json`의 Git commit으로 고정했습니다. 개인 PC의 외부
 폴더가 없어도 같은 package를 받을 수 있습니다. 기존 WebGL/release workflow는 수정하지
