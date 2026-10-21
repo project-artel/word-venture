@@ -3,10 +3,11 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
+using UnityEngine.Rendering;
 
 public static class ArtelCiBuild
 {
-    public static void BuildWindows()
+    public static void BuildLinux()
     {
         var scenes = EditorBuildSettings.scenes
             .Where(scene => scene.enabled)
@@ -15,17 +16,30 @@ public static class ArtelCiBuild
         if (scenes.Length == 0)
             throw new BuildFailedException("No enabled scenes in build settings.");
 
-        const string directory = "build/StandaloneWindows64";
+        const string directory = "build/StandaloneLinux64";
         Directory.CreateDirectory(directory);
-        // SDK 의 QA 기능을 포함하되 실제 player 는 화면을 렌더링하는 일반 빌드로 실행한다.
-        var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+        const BuildTarget target = BuildTarget.StandaloneLinux64;
+        var useDefaultGraphics = PlayerSettings.GetUseDefaultGraphicsAPIs(target);
+        var graphicsApis = PlayerSettings.GetGraphicsAPIs(target);
+        try
         {
-            scenes = scenes,
-            locationPathName = directory + "/WordVenture.exe",
-            target = BuildTarget.StandaloneWindows64,
-            options = BuildOptions.Development
-        });
-        if (report.summary.result != BuildResult.Succeeded)
-            throw new BuildFailedException("ARTEL Windows build failed: " + report.summary.result);
+            // Xvfb 와 Mesa 에서 화면을 캡처할 수 있도록 QA 빌드에 OpenGLCore 를 지정한다.
+            PlayerSettings.SetUseDefaultGraphicsAPIs(target, false);
+            PlayerSettings.SetGraphicsAPIs(target, new[] { GraphicsDeviceType.OpenGLCore });
+            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+            {
+                scenes = scenes,
+                locationPathName = directory + "/WordVenture.x86_64",
+                target = target,
+                options = BuildOptions.Development
+            });
+            if (report.summary.result != BuildResult.Succeeded)
+                throw new BuildFailedException("ARTEL Linux build failed: " + report.summary.result);
+        }
+        finally
+        {
+            PlayerSettings.SetGraphicsAPIs(target, graphicsApis);
+            PlayerSettings.SetUseDefaultGraphicsAPIs(target, useDefaultGraphics);
+        }
     }
 }

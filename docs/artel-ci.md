@@ -1,6 +1,6 @@
-# Windows 빌드에 ARTEL TC 검증 추가
+# Linux 빌드에 ARTEL TC 검증 추가
 
-`.github/workflows/artel-qa.yml`은 설정 확인 → Windows Development Build → ARTEL TC
+`.github/workflows/artel-qa.yml`은 설정 확인 → Linux Development Build → ARTEL TC
 검증 순서로 실행합니다. 같은 저장소의 PR과 `develop` push, 수동 실행을 지원합니다.
 Fork PR은 secret을 전달하지 않고 실행을 건너뜁니다.
 
@@ -20,18 +20,23 @@ Fork PR은 secret을 전달하지 않고 실행을 건너뜁니다.
 
 현재 선택한 대상은 project `11`(WordVenture 사용자 관점 테스트)의 test-run
 `28`(WordVenture 코드 기반 사용자 관점 테스트)입니다. 저장 데이터가 없는 상태를 전제하며,
-각 실행에서 새 Windows runner를 사용합니다.
+각 실행에서 새 Linux runner를 사용합니다.
 
 Unity 인증은 [GameCI activation 안내](https://game.ci/docs/github/activation/)를 따릅니다.
 workflow가 license를 발급하지는 않습니다. 설정이 없으면 `설정 확인` job이 누락된 이름을
 표시하고 실패하며, Unity 빌드와 QA는 시작하지 않습니다.
 
-## Windows 빌드 구성
+## Linux 빌드 구성
 
 Unity 2022.3.62f3으로 Build Settings의 enabled scene을 빌드합니다.
-`ArtelCiBuild.BuildWindows`는 SDK의 QA 기능을 포함하도록 `BuildOptions.Development`를
-사용합니다. 실행 파일뿐 아니라 `_Data`, DLL을 포함한 전체 player를 `artel-windows-player`
-artifact에 저장한 뒤 Windows runner로 전달합니다.
+`ArtelCiBuild.BuildLinux`는 SDK의 QA 기능을 포함하도록 `BuildOptions.Development`를
+사용합니다. QA 빌드에만 OpenGLCore를 지정하고 기존 graphics 설정은 빌드 후 복원합니다.
+실행 파일뿐 아니라 `_Data`, shared library를 포함한 전체 player를 `artel-linux-player`
+artifact에 저장한 뒤 Linux runner로 전달합니다.
+
+QA job은 Ubuntu 24.04에서 Xvfb의 1280×720 가상 화면과 Mesa software rendering을 사용합니다.
+artifact 다운로드 후 실행 권한을 복원하고, display와 OpenGL 초기화를 확인한 뒤 게임을 실행합니다.
+`artel-linux-rendering` artifact에는 Xvfb 및 OpenGL 진단 로그가 저장됩니다.
 
 ARTEL SDK는 `Packages/manifest.json`의 Git commit으로 고정했습니다. 개인 PC의 외부
 폴더가 없어도 같은 package를 받을 수 있습니다. 기존 WebGL/release workflow는 수정하지
@@ -46,7 +51,7 @@ ARTEL SDK는 `Packages/manifest.json`의 Git commit으로 고정했습니다. �
 
 처음에는 짧은 시나리오가 포함된 test-run으로 확인하세요. 테스트 데이터와 새 설치 상태가
 일치해야 합니다. GitHub runner에서의 Unity 렌더링과 SDK screen capture는 별도로 검증해야
-합니다. 일반 Windows runner에서 그래픽 초기화가 실패하면 게임을 지원하는 일회용 GPU runner가
+합니다. 일반 Linux runner에서 그래픽 초기화가 실패하면 게임을 지원하는 일회용 GPU runner가
 필요할 수 있습니다. 화면 검증이므로 player에 `-batchmode`나 `-nographics`를 추가하지 않습니다.
 
 ## 변경 검증

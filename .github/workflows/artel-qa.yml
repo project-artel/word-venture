@@ -17,7 +17,7 @@ jobs:
   preflight:
     name: 설정 확인
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - name: 필수 설정 확인
@@ -46,9 +46,9 @@ jobs:
           exit "$missing"
 
   build:
-    name: Windows QA 빌드
+    name: Linux QA 빌드
     needs: preflight
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
@@ -65,8 +65,8 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: Library
-          key: Library-Artel-Windows-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: Library-Artel-Windows-
+          key: Library-Artel-Linux-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: Library-Artel-Linux-
       - name: Development Build 생성
         uses: game-ci/unity-builder@v4
         env:
@@ -76,29 +76,51 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           unityVersion: 2022.3.62f3
-          targetPlatform: StandaloneWindows64
+          targetPlatform: StandaloneLinux64
           buildName: WordVenture
           buildsPath: build
-          buildMethod: ArtelCiBuild.BuildWindows
+          buildMethod: ArtelCiBuild.BuildLinux
           versioning: None
-      - name: Windows player 저장
+      - name: Linux player 저장
         uses: actions/upload-artifact@v6
         with:
-          name: artel-windows-player
-          path: build/StandaloneWindows64/
+          name: artel-linux-player
+          path: build/StandaloneLinux64/
           if-no-files-found: error
           retention-days: 7
 
   qa:
     name: ARTEL TC 검증
     needs: build
-    runs-on: windows-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 40
+    env:
+      DISPLAY: ':99'
+      LIBGL_ALWAYS_SOFTWARE: '1'
     steps:
       - uses: actions/download-artifact@v5
         with:
-          name: artel-windows-player
+          name: artel-linux-player
           path: Build
+      - name: Linux 렌더링 환경 준비
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y xvfb x11-utils mesa-utils libgl1-mesa-dri libglu1-mesa libasound2t64 libxcursor1 libxrandr2 libxinerama1 libxi6
+          chmod +x Build/WordVenture.x86_64
+          if [[ -f Build/UnityCrashHandler64 ]]; then chmod +x Build/UnityCrashHandler64; fi
+          Xvfb "$DISPLAY" -screen 0 1280x720x24 -ac +extension GLX +render -noreset > "$RUNNER_TEMP/artel-xvfb.log" 2>&1 &
+          echo "ARTEL_XVFB_PID=$!" >> "$GITHUB_ENV"
+          for attempt in {1..20}; do
+            if xdpyinfo -display "$DISPLAY" >/dev/null 2>&1; then
+              glxinfo -B > "$RUNNER_TEMP/artel-glxinfo.log" 2>&1
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::Xvfb display를 시작하지 못했습니다."
+          exit 1
       - name: ARTEL test-run 실행
         id: artel
         uses: project-artel/qa-action@8e85843980e85a13f2a5c9b3ea7aac3c1cd20523 # v0.1.0-alpha.1
@@ -106,6 +128,23 @@ jobs:
           token: ${{ secrets.ARTEL_TOKEN }}
           project-id: ${{ vars.ARTEL_PROJECT_ID }}
           test-run-id: ${{ vars.ARTEL_TEST_RUN_ID }}
-          build-path: ./Build/WordVenture.exe
+          build-path: ./Build/WordVenture.x86_64
           launch-timeout: '120'
           timeout: '1800'
+      - name: 렌더링 로그 저장
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: artel-linux-rendering
+          path: |
+            ${{ runner.temp }}/artel-xvfb.log
+            ${{ runner.temp }}/artel-glxinfo.log
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Xvfb 종료
+        if: always()
+        shell: bash
+        run: |
+          if [[ -n "${ARTEL_XVFB_PID:-}" ]]; then
+            kill "$ARTEL_XVFB_PID" 2>/dev/null || true
+          fi
