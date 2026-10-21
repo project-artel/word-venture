@@ -49,3 +49,18 @@ Examples:
 fix: 대사 연타 시 대화 텍스트 깜박임 수정
 perf: 맵 배경 갱신을 스테이지 변경 시에만 수행
 ```
+
+## Code Review Rules
+
+- Write all code review titles, descriptions, comments, and summaries in Korean.
+- Preserve code identifiers, file paths, commands, error messages, and technical terms in their original form.
+- For each finding, concisely explain the cause, impact, and suggested fix.
+
+## Writing Style
+
+Follow [`.agents/docs/writing-style.md`](.agents/docs/writing-style.md) for chat
+replies, reviews, plans, handoffs, issues, commit titles and bodies, pull
+requests, release notes, source comments, and all frontend copy (including
+localization, errors, labels, and accessibility text).
+Its wording and title rules take precedence over older style examples;
+preserve project-specific technical constraints and workflows.

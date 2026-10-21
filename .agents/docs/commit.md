@@ -47,3 +47,10 @@ fix(cache): 새로고침 중 기존 캐시 값 유지
 
 Refs #123
 ```
+
+## Writing Style
+
+Follow [writing-style.md](writing-style.md) when adding or editing text covered
+by this document. Its wording and title rules supersede older tone examples;
+preserve project-specific workflows, templates, terminology, and localization.
+For UI copy, retain the sentence forms defined in this document.
