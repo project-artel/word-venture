@@ -154,3 +154,10 @@ successful verification.
 - review approvals complete
 - unresolved risks explicitly accepted
 - deployment or migration order documented
+
+## Writing Style
+
+Follow [writing-style.md](writing-style.md) when adding or editing text covered
+by this document. Its wording and title rules supersede older tone examples;
+preserve project-specific workflows, templates, terminology, and localization.
+For UI copy, retain the sentence forms defined in this document.
