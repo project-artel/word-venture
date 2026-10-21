@@ -45,6 +45,17 @@ ARTEL SDK는 `Packages/manifest.json`의 Git commit으로 고정했습니다. �
 
 ## TC 실행 결과 확인
 
+QA 고급 설정의 구조 옵션은 Actions variable `ARTEL_ARCH`에 JSON으로 지정합니다.
+예를 들어 `{"engine":"planner_executer"}`로 엔진을 선택하거나,
+`{"label":"ci-custom","phase_cycle":"full","macros":"off"}`로 agent 구조를 조정합니다.
+수동 실행의 `arch` 입력은 variable보다 우선합니다. 둘 다 비우면 서버 기본 구조입니다.
+이 workflow의 QA job은 소스를 checkout하지 않으므로 JSON을 직접 입력합니다.
+
+추가로 `ARTEL_PROMPT_VERSION`, `ARTEL_REASONING_EFFORT`, `ARTEL_REASONING_MAX_TOKENS`,
+`ARTEL_CONTENT_MAP_MODE`, `ARTEL_KNOWLEDGE_MODE` variables를 설정할 수 있습니다.
+reasoning effort와 token budget은 동시에 지정하지 않습니다. 생략한 값은 서버 기본값입니다.
+구조의 전체 필드와 허용 값은 [qa-action 안내](https://github.com/project-artel/qa-action/pull/1)를 참고하세요.
+
 `qa-action`은 모델 선택을 지원하는 commit SHA로 고정했습니다. `model` 입력은
 `claude/claude-sonnet-5-5`이며, ARTEL 서버에 등록된 공용 Claude API key로 호출합니다.
 GitHub runner에 모델 API key를 추가할 필요는 없습니다. 기본 ARTEL stage 환경에

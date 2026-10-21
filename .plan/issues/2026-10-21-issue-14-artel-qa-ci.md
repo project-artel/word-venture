@@ -23,6 +23,9 @@ Linux Development Build를 만들고 ARTEL test-run을 실행해 CI 결과에 �
 - qa-action alpha는 runner의 실제 게임 렌더링을 보장하지 않는다.
 - 사용자 요청으로 QA 모델을 `claude/claude-sonnet-5-5`로 지정한다. Action의 model 입력을
   CLI의 --model에 전달하며, 모델 API 인증은 ARTEL 서버의 공용 key를 사용한다.
+- QA 고급 구조는 ARTEL_ARCH JSON variable 또는 수동 실행 arch 입력으로 선택한다.
+  구조를 지정하지 않으면 서버 기본값을 유지한다. prompt, reasoning, content map, knowledge도
+  선택적 variables로 전달한다.
 
 ## Approach (Checklist)
 

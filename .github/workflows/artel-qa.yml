@@ -5,6 +5,11 @@ on:
   push:
     branches: [develop]
   workflow_dispatch:
+    inputs:
+      arch:
+        description: 'ARTEL 구조 JSON (비우면 ARTEL_ARCH variable 또는 서버 기본값)'
+        type: string
+        required: false
 
 permissions:
   contents: read
@@ -124,12 +129,18 @@ jobs:
           exit 1
       - name: ARTEL test-run 실행
         id: artel
-        uses: project-artel/qa-action@a8830093bb97d311ae3a6c3258766c06352c400c # model input
+        uses: project-artel/qa-action@83131c176b9ad041479a77b6f3f905ce27ca57b1 # advanced QA settings
         with:
           token: ${{ secrets.ARTEL_TOKEN }}
           project-id: ${{ vars.ARTEL_PROJECT_ID }}
           test-run-id: ${{ vars.ARTEL_TEST_RUN_ID }}
           model: claude/claude-sonnet-5-5
+          arch: ${{ inputs.arch || vars.ARTEL_ARCH }}
+          prompt-version: ${{ vars.ARTEL_PROMPT_VERSION }}
+          reasoning-effort: ${{ vars.ARTEL_REASONING_EFFORT }}
+          reasoning-max-tokens: ${{ vars.ARTEL_REASONING_MAX_TOKENS }}
+          content-map-mode: ${{ vars.ARTEL_CONTENT_MAP_MODE }}
+          knowledge-mode: ${{ vars.ARTEL_KNOWLEDGE_MODE }}
           build-path: ./Build/WordVenture.x86_64
           launch-timeout: '120'
           timeout: '1800'
