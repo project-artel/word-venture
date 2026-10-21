@@ -1,0 +1,111 @@
+name: ARTEL TC 검증
+
+on:
+  pull_request:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: artel-qa-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    name: 설정 확인
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: 필수 설정 확인
+        env:
+          ARTEL_TOKEN: ${{ secrets.ARTEL_TOKEN }}
+          ARTEL_PROJECT_ID: ${{ vars.ARTEL_PROJECT_ID }}
+          ARTEL_TEST_RUN_ID: ${{ vars.ARTEL_TEST_RUN_ID }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=0
+          for name in ARTEL_TOKEN ARTEL_PROJECT_ID ARTEL_TEST_RUN_ID UNITY_EMAIL UNITY_PASSWORD; do
+            if [[ -z "${!name}" ]]; then
+              echo "::error::$name 설정이 필요합니다. docs/artel-ci.md를 확인하세요."
+              missing=1
+            fi
+          done
+          if [[ -z "$UNITY_LICENSE" && -z "$UNITY_SERIAL" ]]; then
+            echo "::error::UNITY_LICENSE 또는 UNITY_SERIAL secret이 필요합니다."
+            missing=1
+          fi
+          exit "$missing"
+
+  build:
+    name: Windows QA 빌드
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: 빌드 디스크 확보
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-Artel-Windows-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: Library-Artel-Windows-
+      - name: Development Build 생성
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2022.3.62f3
+          targetPlatform: StandaloneWindows64
+          buildName: WordVenture
+          buildsPath: build
+          buildMethod: ArtelCiBuild.BuildWindows
+          versioning: None
+      - name: Windows player 저장
+        uses: actions/upload-artifact@v6
+        with:
+          name: artel-windows-player
+          path: build/StandaloneWindows64/
+          if-no-files-found: error
+          retention-days: 7
+
+  qa:
+    name: ARTEL TC 검증
+    needs: build
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: artel-windows-player
+          path: Build
+      - name: ARTEL test-run 실행
+        id: artel
+        uses: project-artel/qa-action@8e85843980e85a13f2a5c9b3ea7aac3c1cd20523 # v0.1.0-alpha.1
+        with:
+          token: ${{ secrets.ARTEL_TOKEN }}
+          project-id: ${{ vars.ARTEL_PROJECT_ID }}
+          test-run-id: ${{ vars.ARTEL_TEST_RUN_ID }}
+          build-path: ./Build/WordVenture.exe
+          launch-timeout: '120'
+          timeout: '1800'
