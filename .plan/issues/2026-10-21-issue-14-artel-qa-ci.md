@@ -21,6 +21,8 @@ Linux Development Build를 만들고 ARTEL test-run을 실행해 CI 결과에 �
   UNITY_EMAIL과 UNITY_PASSWORD도 사용자 등록을 확인했다.
 - 사용자 요청으로 Windows 실행을 취소하고 Linux 빌드와 Xvfb/Mesa 렌더링으로 전환했다.
 - qa-action alpha는 runner의 실제 게임 렌더링을 보장하지 않는다.
+- 사용자 요청으로 QA 모델을 `claude/claude-sonnet-5-5`로 지정한다. Action의 model 입력을
+  CLI의 --model에 전달하며, 모델 API 인증은 ARTEL 서버의 공용 key를 사용한다.
 
 ## Approach (Checklist)
 

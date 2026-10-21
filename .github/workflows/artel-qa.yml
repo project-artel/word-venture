@@ -124,11 +124,12 @@ jobs:
           exit 1
       - name: ARTEL test-run 실행
         id: artel
-        uses: project-artel/qa-action@8e85843980e85a13f2a5c9b3ea7aac3c1cd20523 # v0.1.0-alpha.1
+        uses: project-artel/qa-action@a8830093bb97d311ae3a6c3258766c06352c400c # model input
         with:
           token: ${{ secrets.ARTEL_TOKEN }}
           project-id: ${{ vars.ARTEL_PROJECT_ID }}
           test-run-id: ${{ vars.ARTEL_TEST_RUN_ID }}
+          model: claude/claude-sonnet-5-5
           build-path: ./Build/WordVenture.x86_64
           launch-timeout: '120'
           timeout: '1800'

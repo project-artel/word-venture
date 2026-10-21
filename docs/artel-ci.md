@@ -45,7 +45,9 @@ ARTEL SDK는 `Packages/manifest.json`의 Git commit으로 고정했습니다. �
 
 ## TC 실행 결과 확인
 
-`qa-action`은 `v0.1.0-alpha.1`의 commit SHA로 고정했습니다. 기본 ARTEL stage 환경에
+`qa-action`은 모델 선택을 지원하는 commit SHA로 고정했습니다. `model` 입력은
+`claude/claude-sonnet-5-5`이며, ARTEL 서버에 등록된 공용 Claude API key로 호출합니다.
+GitHub runner에 모델 API key를 추가할 필요는 없습니다. 기본 ARTEL stage 환경에
 연결하며, 게임 등록은 120초, QA 판정은 1800초까지 기다립니다. 완료된 `PASSED`만 CI 성공이며
 실패·판정 불명·시간 초과는 실패입니다. Job summary와 `artel-qa-*` artifact에서 상세 결과와
 진단 로그를 확인합니다.
