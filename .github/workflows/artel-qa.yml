@@ -7,9 +7,14 @@ on:
   workflow_dispatch:
     inputs:
       arch:
-        description: 'ARTEL 구조 JSON (비우면 ARTEL_ARCH variable 또는 서버 기본값)'
+        description: 'ARTEL 구조 JSON (비우면 ARTEL_ARCH variable 또는 planner_executer)'
         type: string
         required: false
+      language:
+        description: 'ARTEL 설명·검증 결과 언어'
+        type: choice
+        options: [ko, en]
+        default: ko
 
 permissions:
   contents: read
@@ -129,13 +134,14 @@ jobs:
           exit 1
       - name: ARTEL test-run 실행
         id: artel
-        uses: project-artel/qa-action@af972424e74bc0fb260e8c78211b140500bc6978 # personal model key
+        uses: project-artel/qa-action@4ccc630d3bf3e6d24580e5e5796b1a4549ce5382 # personal key and output language
         with:
           token: ${{ secrets.ARTEL_TOKEN }}
           project-id: ${{ vars.ARTEL_PROJECT_ID }}
           test-run-id: ${{ vars.ARTEL_TEST_RUN_ID }}
           model: claude/claude-sonnet-5-5
           key-source: user
+          language: ${{ inputs.language || vars.ARTEL_LANGUAGE || 'ko' }}
           arch: ${{ inputs.arch || vars.ARTEL_ARCH || '{"engine":"planner_executer"}' }}
           prompt-version: ${{ vars.ARTEL_PROMPT_VERSION }}
           reasoning-effort: ${{ vars.ARTEL_REASONING_EFFORT }}

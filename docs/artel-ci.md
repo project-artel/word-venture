@@ -48,13 +48,18 @@ ARTEL SDK는 `Packages/manifest.json`의 Git commit으로 고정했습니다. �
 QA 고급 설정의 구조 옵션은 Actions variable `ARTEL_ARCH`에 JSON으로 지정합니다.
 예를 들어 `{"engine":"planner_executer"}`로 엔진을 선택하거나,
 `{"label":"ci-custom","phase_cycle":"full","macros":"off"}`로 agent 구조를 조정합니다.
-수동 실행의 `arch` 입력은 variable보다 우선합니다. 둘 다 비우면 서버 기본 구조입니다.
+수동 실행의 `arch` 입력은 variable보다 우선합니다. 둘 다 비우면 `planner_executer`를 사용합니다.
 이 workflow의 QA job은 소스를 checkout하지 않으므로 JSON을 직접 입력합니다.
 
 추가로 `ARTEL_PROMPT_VERSION`, `ARTEL_REASONING_EFFORT`, `ARTEL_REASONING_MAX_TOKENS`,
 `ARTEL_CONTENT_MAP_MODE`, `ARTEL_KNOWLEDGE_MODE` variables를 설정할 수 있습니다.
 reasoning effort와 token budget은 동시에 지정하지 않습니다. 생략한 값은 서버 기본값입니다.
 구조의 전체 필드와 허용 값은 [qa-action 안내](https://github.com/project-artel/qa-action/pull/1)를 참고하세요.
+
+ARTEL 설명과 검증 결과는 `language: ko`로 한국어를 요청합니다. 수동 실행에서는
+`language` 입력으로 `ko` 또는 `en`을 선택하고, 자동 실행은 `ARTEL_LANGUAGE` variable이
+없으면 `ko`를 사용합니다. 게임 UI 언어는 변경하지 않습니다. planner의 출력 언어 수정이
+stage에 배포되기 전에는 설정이 기록돼도 영어 결과가 나올 수 있습니다.
 
 `qa-action`은 모델 선택을 지원하는 commit SHA로 고정했습니다. `model` 입력은
 `claude/claude-sonnet-5-5`이며, `key-source: user`로 ARTEL_TOKEN 소유 계정에 등록된 개인
