@@ -48,7 +48,7 @@ ARTEL SDK는 `Packages/manifest.json`의 Git commit으로 고정했습니다. �
 QA 고급 설정의 구조 옵션은 Actions variable `ARTEL_ARCH`에 JSON으로 지정합니다.
 예를 들어 `{"engine":"planner_executer"}`로 엔진을 선택하거나,
 `{"label":"ci-custom","phase_cycle":"full","macros":"off"}`로 agent 구조를 조정합니다.
-수동 실행의 `arch` 입력은 variable보다 우선합니다. 둘 다 비우면 서버 기본 구조입니다.
+수동 실행의 `arch` 입력은 variable보다 우선합니다. 둘 다 비우면 `planner_executer`를 사용합니다.
 이 workflow의 QA job은 소스를 checkout하지 않으므로 JSON을 직접 입력합니다.
 
 추가로 `ARTEL_PROMPT_VERSION`, `ARTEL_REASONING_EFFORT`, `ARTEL_REASONING_MAX_TOKENS`,
@@ -56,8 +56,14 @@ QA 고급 설정의 구조 옵션은 Actions variable `ARTEL_ARCH`에 JSON으로
 reasoning effort와 token budget은 동시에 지정하지 않습니다. 생략한 값은 서버 기본값입니다.
 구조의 전체 필드와 허용 값은 [qa-action 안내](https://github.com/project-artel/qa-action/pull/1)를 참고하세요.
 
-`qa-action`은 모델 선택을 지원하는 commit SHA로 고정했습니다. `model` 입력은
-`claude/claude-sonnet-5-5`이며, ARTEL 서버에 등록된 공용 Claude API key로 호출합니다.
+ARTEL 설명과 검증 결과는 `language: ko`로 한국어를 요청합니다. 수동 실행에서는
+`language` 입력으로 `ko` 또는 `en`을 선택하고, 자동 실행은 `ARTEL_LANGUAGE` variable이
+없으면 `ko`를 사용합니다. 게임 UI 언어는 변경하지 않습니다. planner의 출력 언어 수정이
+stage에 배포되기 전에는 설정이 기록돼도 영어 결과가 나올 수 있습니다.
+
+`qa-action`은 `v0.1.0` release tag로 고정했습니다. `model` 입력은
+`claude/claude-sonnet-5-5`이며, `key-source: user`로 ARTEL_TOKEN 소유 계정에 등록된 개인
+Claude API key를 사용합니다. 구조를 따로 지정하지 않으면 `planner_executer`를 사용합니다.
 GitHub runner에 모델 API key를 추가할 필요는 없습니다. 기본 ARTEL stage 환경에
 연결하며, 게임 등록은 120초, QA 판정은 1800초까지 기다립니다. 완료된 `PASSED`만 CI 성공이며
 실패·판정 불명·시간 초과는 실패입니다. Job summary와 `artel-qa-*` artifact에서 상세 결과와
@@ -73,3 +79,18 @@ GitHub runner에 모델 API key를 추가할 필요는 없습니다. 기본 ARTE
 workflow 구문, dependency 고정과 artifact 연결을 검사했습니다. Unity 인증 설정이
 완료된 뒤 실제 게임 빌드 및 TC 결과를 확인해야 합니다.
 draft PR을 검토하고 `develop`에 반영하면 Actions의 수동 실행으로도 검증할 수 있습니다.
+
+## QA timeline 연결
+
+Action의 Job summary에서 QA timeline을 열 수 있습니다. PR의 checks 목록에는
+`ARTEL QA timeline` check가 추가되며 Details가 해당 실행의 timeline을 가리킵니다.
+run 생성 이후 검증이 실패해도 링크는 남습니다. ARTEL 로그인과 프로젝트 접근 권한이 필요합니다.
+이 check를 작성하기 위해 QA job에만 `checks: write`를 부여합니다.
+
+## 실행 136 확인 결과
+
+Linux 빌드, SDK instance 등록, 개인 Sonnet 호출 46회와 결과 artifact 저장을 확인했습니다.
+17번째 step이 RightArrow를 300회 시도한 직후 서버 run은 FAILED로 종료됐습니다.
+최종 verdict와 종료 사유 event는 없어 서버 내부 원인은 확정하지 못했습니다.
+Action은 서버의 판정 불명을 UNKNOWN과 실패 exit code로 전달했으며 1800초 timeout에
+도달한 실행이 아닙니다. TC·화면 불일치와 planner Macro 오류는 Action release와 별도로 수정합니다.

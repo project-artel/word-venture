@@ -7,9 +7,14 @@ on:
   workflow_dispatch:
     inputs:
       arch:
-        description: 'ARTEL 구조 JSON (비우면 ARTEL_ARCH variable 또는 서버 기본값)'
+        description: 'ARTEL 구조 JSON (비우면 ARTEL_ARCH variable 또는 planner_executer)'
         type: string
         required: false
+      language:
+        description: 'ARTEL 설명·검증 결과 언어'
+        type: choice
+        options: [ko, en]
+        default: ko
 
 permissions:
   contents: read
@@ -96,6 +101,9 @@ jobs:
 
   qa:
     name: ARTEL TC 검증
+    permissions:
+      contents: read
+      checks: write
     needs: build
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -129,13 +137,15 @@ jobs:
           exit 1
       - name: ARTEL test-run 실행
         id: artel
-        uses: project-artel/qa-action@83131c176b9ad041479a77b6f3f905ce27ca57b1 # advanced QA settings
+        uses: project-artel/qa-action@v0.1.0
         with:
           token: ${{ secrets.ARTEL_TOKEN }}
           project-id: ${{ vars.ARTEL_PROJECT_ID }}
           test-run-id: ${{ vars.ARTEL_TEST_RUN_ID }}
           model: claude/claude-sonnet-5-5
-          arch: ${{ inputs.arch || vars.ARTEL_ARCH }}
+          key-source: user
+          language: ${{ inputs.language || vars.ARTEL_LANGUAGE || 'ko' }}
+          arch: ${{ inputs.arch || vars.ARTEL_ARCH || '{"engine":"planner_executer"}' }}
           prompt-version: ${{ vars.ARTEL_PROMPT_VERSION }}
           reasoning-effort: ${{ vars.ARTEL_REASONING_EFFORT }}
           reasoning-max-tokens: ${{ vars.ARTEL_REASONING_MAX_TOKENS }}
@@ -144,6 +154,27 @@ jobs:
           build-path: ./Build/WordVenture.x86_64
           launch-timeout: '120'
           timeout: '1800'
+      - name: PR에 QA timeline 연결
+        if: ${{ always() && steps.artel.outputs.timeline-url != '' }}
+        uses: actions/github-script@v7
+        env:
+          ARTEL_TIMELINE_URL: ${{ steps.artel.outputs.timeline-url }}
+          ARTEL_OUTCOME: ${{ steps.artel.outcome }}
+          ARTEL_VERDICT: ${{ steps.artel.outputs.verdict }}
+        with:
+          script: |
+            await github.rest.checks.create({
+              ...context.repo,
+              name: 'ARTEL QA timeline',
+              head_sha: context.payload.pull_request?.head.sha || context.sha,
+              status: 'completed',
+              conclusion: process.env.ARTEL_OUTCOME === 'success' ? 'success' : 'failure',
+              details_url: process.env.ARTEL_TIMELINE_URL,
+              output: {
+                title: `ARTEL 검증: ${process.env.ARTEL_VERDICT || 'UNKNOWN'}`,
+                summary: `[QA timeline 열기](${process.env.ARTEL_TIMELINE_URL})`,
+              },
+            });
       - name: 렌더링 로그 저장
         if: always()
         uses: actions/upload-artifact@v6
