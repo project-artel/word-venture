@@ -61,7 +61,7 @@ ARTEL 설명과 검증 결과는 `language: ko`로 한국어를 요청합니다.
 없으면 `ko`를 사용합니다. 게임 UI 언어는 변경하지 않습니다. planner의 출력 언어 수정이
 stage에 배포되기 전에는 설정이 기록돼도 영어 결과가 나올 수 있습니다.
 
-`qa-action`은 `v0.1.0-alpha.2` release tag로 고정했습니다. `model` 입력은
+`qa-action`은 `v0.1.0` release tag로 고정했습니다. `model` 입력은
 `claude/claude-sonnet-5-5`이며, `key-source: user`로 ARTEL_TOKEN 소유 계정에 등록된 개인
 Claude API key를 사용합니다. 구조를 따로 지정하지 않으면 `planner_executer`를 사용합니다.
 GitHub runner에 모델 API key를 추가할 필요는 없습니다. 기본 ARTEL stage 환경에

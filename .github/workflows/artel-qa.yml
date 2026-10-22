@@ -137,7 +137,7 @@ jobs:
           exit 1
       - name: ARTEL test-run 실행
         id: artel
-        uses: project-artel/qa-action@v0.1.0-alpha.2
+        uses: project-artel/qa-action@v0.1.0
         with:
           token: ${{ secrets.ARTEL_TOKEN }}
           project-id: ${{ vars.ARTEL_PROJECT_ID }}
