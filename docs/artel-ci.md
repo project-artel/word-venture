@@ -57,7 +57,8 @@ reasoning effort와 token budget은 동시에 지정하지 않습니다. 생략�
 구조의 전체 필드와 허용 값은 [qa-action 안내](https://github.com/project-artel/qa-action/pull/1)를 참고하세요.
 
 `qa-action`은 모델 선택을 지원하는 commit SHA로 고정했습니다. `model` 입력은
-`claude/claude-sonnet-5-5`이며, ARTEL 서버에 등록된 공용 Claude API key로 호출합니다.
+`claude/claude-sonnet-5-5`이며, `key-source: user`로 ARTEL_TOKEN 소유 계정에 등록된 개인
+Claude API key를 사용합니다. 구조를 따로 지정하지 않으면 `planner_executer`를 사용합니다.
 GitHub runner에 모델 API key를 추가할 필요는 없습니다. 기본 ARTEL stage 환경에
 연결하며, 게임 등록은 120초, QA 판정은 1800초까지 기다립니다. 완료된 `PASSED`만 CI 성공이며
 실패·판정 불명·시간 초과는 실패입니다. Job summary와 `artel-qa-*` artifact에서 상세 결과와
