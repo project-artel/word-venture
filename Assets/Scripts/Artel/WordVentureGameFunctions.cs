@@ -33,6 +33,13 @@ public static class WordVentureGameFunctions
 
     // ---- cheats ----
 
+    [ArtelOverrideCheat("reset_game", "현재 전투나 스토리를 종료하고 타이틀 화면으로 돌아갑니다. 저장된 진행도는 유지합니다.")]
+    private static IEnumerator ResetGame()
+    {
+        Time.timeScale = 1f;
+        yield return SceneManager.LoadSceneAsync(SceneName(GameScene.Title));
+    }
+
     [ArtelCheat("Sets the unlocked stage (MapMove.StagePosition, 0 village .. 4 boss) and saves it to PlayerPrefs. Takes effect on the map screen.")]
     static string UnlockStage([CheatRange(0, 4)] int stage)
     {
